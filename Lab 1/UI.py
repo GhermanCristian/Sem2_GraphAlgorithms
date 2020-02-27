@@ -111,7 +111,7 @@ class UI:
                 numbers = self.__readIntegers(1)
                 self.__graph.removeVertex(numbers[0])
                 
-            #make a copy
+            #make a copy of the graph
             elif command == 14:
                 pass    
                 
