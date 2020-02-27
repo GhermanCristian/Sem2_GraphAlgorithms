@@ -113,7 +113,8 @@ class UI:
                 
             #make a copy of the graph
             elif command == 14:
-                pass    
+                newGraph = self.__graph.createCopy()
+                newGraph.printGraph() 
                 
             #print the graph
             elif command == 15:

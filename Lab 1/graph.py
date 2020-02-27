@@ -1,3 +1,5 @@
+import copy
+
 class Graph:
     def __init__(self, isOriented, weighted = False):
         self._dictIn = {}
@@ -162,7 +164,8 @@ class Graph:
         if index == self._nrVertices - 1:
             self._nrVertices -= 1
         
-        
+    def createCopy(self):
+        return copy.deepcopy(self) 
         
         
             
