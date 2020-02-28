@@ -36,7 +36,8 @@ class Graph:
         try:
             self._nrVertices, self._nrEdges = line.split()
             self._nrVertices = int(self._nrVertices)
-            self._nrEdges = int(self._nrEdges)
+            #self._nrEdges = int(self._nrEdges)
+            self._nrEdges = 0
         except Exception as e:
             return (str(e))
         
@@ -64,6 +65,18 @@ class Graph:
                 return str(e)
             
         file.close()
+    
+    def saveGraph(self):
+        '''
+        '''
+        file = open("graph.txt", "w")
+        
+        file.write("%d %d\n" % (self._nrVertices, self._nrEdges))
+        for vertex in self._dictOut.keys():
+            for neighbour in self._dictOut[vertex]:
+                file.write("%d %d\n" % (vertex, neighbour))
+        
+        file.close()
         
     def getVerticesCount(self):
         return self._nrVertices
@@ -82,25 +95,25 @@ class Graph:
     
     def getInDegree(self, vertex):
         if self._isVertex(vertex) == False:
-            return -1
+            raise ValueError("Vertex doesn't exist")
         
         return len(self._dictIn[vertex])
     
     def getOutDegree(self, vertex):
         if self._isVertex(vertex) == False:
-            return -1
+            raise ValueError("Vertex doesn't exist")
         
         return len(self._dictOut[vertex])
         
     def getInEdges(self, vertex):
         if self._isVertex(vertex) == False:
-            return -1
+            raise ValueError("Vertex doesn't exist")
         
         return self._dictIn[vertex]
     
     def getOutEdges(self, vertex):
         if self._isVertex(vertex) == False:
-            return -1
+            raise ValueError("Vertex doesn't exist")
         
         return self._dictOut[vertex]  
         
@@ -108,8 +121,10 @@ class Graph:
         '''
         '''
         #the edge already exists
-        if self._isVertex(srcVertex) == False or self._isVertex(destVertex) == False or self.isEdge(srcVertex, destVertex) == True:
-            return
+        if self._isVertex(srcVertex) == False or self._isVertex(destVertex) == False:
+            raise ValueError("Invalid vertices")
+        if self.isEdge(srcVertex, destVertex) == True:
+            raise ValueError("Edge already exists")
         
         self._dictIn[destVertex].append(srcVertex)
         self._dictOut[srcVertex].append(destVertex)
@@ -124,7 +139,9 @@ class Graph:
         '''
         '''
         if self._isVertex(srcVertex) == False or self._isVertex(destVertex) == False:
-            return
+            raise ValueError("Invalid vertices")
+        if self.isEdge(srcVertex, destVertex) == False:
+            raise ValueError("Edge doesn't exist")
         
         for index in range(len(self._dictOut[srcVertex])):
             if self._dictOut[srcVertex][index] == destVertex:
@@ -142,7 +159,7 @@ class Graph:
         '''
         '''
         if self._isVertex(index) == True:
-            return 
+            raise ValueError("Vertex already exists")
         
         self._newVertex(index)
         if index >= self._nrVertices:
@@ -152,7 +169,7 @@ class Graph:
         '''
         '''
         if self._isVertex(index) == False:
-            return 
+            raise ValueError("Vertex doesn't exist") 
         
         #remove all the edges which have as destination the crt vertex
         for vertex in self._dictIn[index]:

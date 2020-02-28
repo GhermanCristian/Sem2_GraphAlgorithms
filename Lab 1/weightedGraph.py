@@ -28,6 +28,18 @@ class WeightedGraph(Graph):
         if self.isEdge(srcVertex, destVertex) == False:
             return
         self._dictCost[(srcVertex, destVertex)] = newCost
+    
+    def saveGraph(self):
+        '''
+        '''
+        file = open("graph.txt", "w")
+        
+        file.write("%d %d\n" % (self._nrVertices, self._nrEdges))
+        for vertex in self._dictOut.keys():
+            for neighbour in self._dictOut[vertex]:
+                file.write("%d %d %d\n" % (vertex, neighbour, self._dictCost[(vertex, neighbour)]))
+        
+        file.close()
         
     def printGraph(self):
         print ("Out graph")

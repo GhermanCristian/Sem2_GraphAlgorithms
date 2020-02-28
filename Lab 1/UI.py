@@ -1,5 +1,4 @@
 from weightedGraph import WeightedGraph
-from graph import Graph
 
 class UI:
     def __init__(self):
@@ -37,6 +36,8 @@ class UI:
             12. Add vertex
             13. Remove vertex
             14. Make a copy
+            15. Print the graph
+            16. Save the graph to file
         """)
         while True:
             command = self.__readIntegers(1)[0]
@@ -44,81 +45,88 @@ class UI:
             if command == 0:
                 print ("Program has ended")
                 return
-            
-            #get the number of vertices
-            elif command == 1:
-                print (self.__graph.getVerticesCount())
+            try:
+                #get the number of vertices
+                if command == 1:
+                    print (self.__graph.getVerticesCount())
+                    
+                #get the set of vertices
+                elif command == 2:
+                    print (self.__graph.getVertices())
                 
-            #get the set of vertices
-            elif command == 2:
-                print (self.__graph.getVertices())
-            
-            #check if the edge exists
-            elif command == 3:
-                numbers = self.__readIntegers(2)
-                print (self.__graph.isEdge(numbers[0], numbers[1]))
+                #check if the edge exists
+                elif command == 3:
+                    numbers = self.__readIntegers(2)
+                    print (self.__graph.isEdge(numbers[0], numbers[1]))
+                    
+                #get the in/ out degree of a vertex
+                elif command == 4:
+                    numbers = self.__readIntegers(1)
+                    print ("In degree = %d\nOut degree = %d" % (self.__graph.getInDegree(numbers[0]), self.__graph.getOutDegree(numbers[0])))
                 
-            #get the in/ out degree of a vertex
-            elif command == 4:
-                numbers = self.__readIntegers(1)
-                print ("In degree = %d\nOut degree = %d" % (self.__graph.getInDegree(numbers[0]), self.__graph.getOutDegree(numbers[0])))
-            
-            #get the inbound edges for a vertex
-            elif command == 5:
-                numbers = self.__readIntegers(1)
-                print ("Inbound edges")
-                for vertex in self.__graph.getInEdges(numbers[0]):
-                    print ("%d %d" % (vertex, numbers[0]))
-            
-            #get the outbound edges for a vertex
-            elif command == 6:
-                numbers = self.__readIntegers(1)
-                print ("Outbound edges")
-                for vertex in self.__graph.getOutEdges(numbers[0]):
-                    print ("%d %d" % (numbers[0], vertex))
-            
-            #get the endpoints of an edge
-            elif command == 7:
-                pass
-            
-            #get the cost of an edge (identified by its endpoints)
-            elif command == 8:
-                numbers = self.__readIntegers(2)
-                print (self.__graph.getEdgeCost(numbers[0], numbers[1]))
-            
-            #modify the cost of an edge (identified by its endpoints)
-            elif command == 9:
-                numbers = self.__readIntegers(3)
-                print (self.__graph.modifyEdgeCost(numbers[0], numbers[1], numbers[2]))
-            
-            #add edge
-            elif command == 10:
-                numbers = self.__readIntegers(3)
-                self.__graph.addEdge(numbers[0], numbers[1], numbers[2])
-            
-            #remove edge
-            elif command == 11:
-                numbers = self.__readIntegers(2)
-                self.__graph.removeEdge(numbers[0], numbers[1]) 
+                #get the inbound edges for a vertex
+                elif command == 5:
+                    numbers = self.__readIntegers(1)
+                    print ("Inbound edges")
+                    for vertex in self.__graph.getInEdges(numbers[0]):
+                        print ("%d %d" % (vertex, numbers[0]))
                 
-            #add vertex
-            elif command == 12:
-                numbers = self.__readIntegers(1)
-                self.__graph.addVertex(numbers[0])
+                #get the outbound edges for a vertex
+                elif command == 6:
+                    numbers = self.__readIntegers(1)
+                    print ("Outbound edges")
+                    for vertex in self.__graph.getOutEdges(numbers[0]):
+                        print ("%d %d" % (numbers[0], vertex))
                 
-            #remove vertex
-            elif command == 13:
-                numbers = self.__readIntegers(1)
-                self.__graph.removeVertex(numbers[0])
+                #get the endpoints of an edge
+                elif command == 7:
+                    pass
                 
-            #make a copy of the graph
-            elif command == 14:
-                newGraph = self.__graph.createCopy()
-                newGraph.printGraph() 
+                #get the cost of an edge (identified by its endpoints)
+                elif command == 8:
+                    numbers = self.__readIntegers(2)
+                    print (self.__graph.getEdgeCost(numbers[0], numbers[1]))
                 
-            #print the graph
-            elif command == 15:
-                self.__graph.printGraph()
+                #modify the cost of an edge (identified by its endpoints)
+                elif command == 9:
+                    numbers = self.__readIntegers(3)
+                    print (self.__graph.modifyEdgeCost(numbers[0], numbers[1], numbers[2]))
+                
+                #add edge
+                elif command == 10:
+                    numbers = self.__readIntegers(3)
+                    self.__graph.addEdge(numbers[0], numbers[1], numbers[2])
+                
+                #remove edge
+                elif command == 11:
+                    numbers = self.__readIntegers(2)
+                    self.__graph.removeEdge(numbers[0], numbers[1]) 
+                    
+                #add vertex
+                elif command == 12:
+                    numbers = self.__readIntegers(1)
+                    self.__graph.addVertex(numbers[0])
+                    
+                #remove vertex
+                elif command == 13:
+                    numbers = self.__readIntegers(1)
+                    self.__graph.removeVertex(numbers[0])
+                    
+                #make a copy of the graph
+                elif command == 14:
+                    newGraph = self.__graph.createCopy()
+                    newGraph.printGraph() 
+                    
+                #print the graph
+                elif command == 15:
+                    self.__graph.printGraph()
+                    
+                #save the graph to file
+                elif command == 16:
+                    self.__graph.saveGraph()
+                    
+            except Exception as e:
+                print (str(e))
                 
             
         
