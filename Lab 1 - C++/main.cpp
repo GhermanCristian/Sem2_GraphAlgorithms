@@ -43,7 +43,7 @@ class LinkedList {
 	public:
 		LinkedList() {
 			head = new Node;
-			head = nullptr;
+			head = nullptr; // need to differentiate between existing and non existing vertices
 			length = 0;
 		}
 
@@ -97,6 +97,13 @@ class LinkedList {
 			return length;
 		}
 
+		void copy(const LinkedList &list) {
+			head->index = list.head->index;
+			head->cost = list.head->cost;
+			head->next = list.head->next;
+			head = list.head;
+		}
+
 		class Iterator {
 			Node* nodePtr;
 
@@ -127,28 +134,40 @@ class LinkedList {
 
 class Graph {
 	private:
-		int nrVertices;
+		int length;
 
 	protected:
+		LinkedList* inEdges; // a list of linked lists
+		LinkedList* outEdges;
+		int nrVertices;
+
 		Node* getEdge(int srcVertex, int destVertex, LinkedList *list) {
 			for (auto iter = list[srcVertex].begin(); !iter.hasEnded(); iter++) {
 				if ((*iter)->index == destVertex) {
 					return *iter;
 				}
-				return nullptr;
 			}
+			return nullptr;
+		}
+
+		void increaseListSize(LinkedList *list) {
+			LinkedList* temp = new LinkedList[length + 1];
+			for (int i = 0; i < length + 1; i++) {
+				temp[i].copy(list[i]);
+			}
+
+			delete list;
+			list = temp;
 		}
 
 	public:
-		LinkedList *inEdges; // a list of linked lists
-		LinkedList *outEdges;
-
 		// constructor
 		Graph(int nrVertices) {
 			inEdges = new LinkedList[nrVertices + 1];
 			outEdges = new LinkedList[nrVertices + 1];
 
 			this->nrVertices = nrVertices;
+			length = nrVertices + 1;
 			cout << "Done with the graph constructor\n";
 		}
 
@@ -166,6 +185,14 @@ class Graph {
 
 		int getOutDegree(int vertex) {
 			return outEdges[vertex].getLength();
+		}
+
+		auto parseInboundEdges(int vertex) {
+			return inEdges[vertex].begin();
+		}
+
+		auto parseOutboundEdges(int vertex) {
+			return outEdges[vertex].begin();
 		}
 
 		void addEdge(int srcVertex, int destVertex) {
@@ -186,10 +213,22 @@ class Graph {
 			inEdges[destVertex].deleteNode(inEdgePtr);
 		}
 
+		void addVertex(int index) {
+			index++;
+			if (index >= length) {
+				cout << &(inEdges) << "\n";
+				increaseListSize(inEdges);
+				increaseListSize(outEdges);
+				length *= 2;
+			}
+			if (index > nrVertices) {
+				nrVertices = index;
+			}
+		}
+
 };
 
 class WeightedGraph : public Graph {
-	int nrVertices;
 	unordered_map <Edge, int, CustomHashFunction> costEdges;
 
 	public:
@@ -284,11 +323,18 @@ int main() {
 				case 0:
 					cout << "Program has ended\n";
 					return 0;
+
 				case 1:
 					cout << "Nr of vertices = " << weightedGraph.getNrVertices() << "\n";
 					break;
+
 				case 2:
+					for (int i = 0; i < weightedGraph.getNrVertices(); i++) {
+						cout << i << " ";
+					}
+					cout << "\n";
 					break;
+
 				case 3:
 					cout << "Insert srcVertex destVertex:\n";
 					cin >> srcVertex >> destVertex;
@@ -299,54 +345,83 @@ int main() {
 						cout << "The edge doesn't exist\n";
 					}
 					break;
+
 				case 4:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
 					cout << "In degree: " << weightedGraph.getInDegree(srcVertex) << "\n";
 					cout << "Out degree: " << weightedGraph.getOutDegree(srcVertex) << "\n";
 					break;
+
 				case 5:
+					cout << "Insert vertex:\n";
+					cin >> srcVertex;
+					for (auto iter = weightedGraph.parseInboundEdges(srcVertex); !iter.hasEnded(); iter++)
+						cout << (*iter)->index << " ";
+					cout << "\n";
 					break;
+
 				case 6:
+					cout << "Insert vertex:\n";
+					cin >> srcVertex;
+					for (auto iter = weightedGraph.parseOutboundEdges(srcVertex); !iter.hasEnded(); iter++)
+						cout << (*iter)->index << " ";
+					cout << "\n";
 					break;
+
 				case 7:
 					break;
+
 				case 8:
 					cout << "Insert srcVertex destVertex:\n";
 					cin >> srcVertex >> destVertex;
 					cout << weightedGraph.getEdgeCost(srcVertex, destVertex) << "\n";
 					break;
+
 				case 9:
 					cout << "Insert srcVertex destVertex newCost:\n";
 					cin >> srcVertex >> destVertex >> cost;
 					weightedGraph.modifyEdgeCost(srcVertex, destVertex, cost);
 					break;
+
 				case 10:
 					cout << "Insert srcVertex destVertex cost:\n";
 					cin >> srcVertex >> destVertex >> cost;
 					weightedGraph.addEdge(srcVertex, destVertex, cost);
 					break;
+
 				case 11:
 					cout << "Insert srcVertex destVertex\n";
 					cin >> srcVertex >> destVertex;
 					weightedGraph.removeEdge(srcVertex, destVertex);
 					break;
+
 				case 12:
+					cout << "Insert srcVertex:\n";
+					cin >> srcVertex;
+					weightedGraph.addVertex(srcVertex);
 					break;
+
 				case 13:
 					break;
+
 				case 14:
 					break;
+
 				case 15:
 					weightedGraph.printGraph();
 					break;
+
 				case 16:
 					loadGraph(nrEdges, in, weightedGraph);
 					break;
+
 				case 17:
 					break;
+
 				case 18:
 					break;
+
 				default:
 					throw 19;
 			}
