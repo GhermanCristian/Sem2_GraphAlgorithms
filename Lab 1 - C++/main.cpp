@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
 using namespace std;
 
 class Node {
@@ -8,7 +9,10 @@ class Node {
 		int index = 0;
 		int cost = 0;
 
-		Node* next = nullptr;
+		Node(int index, int cost) {
+			this->index = index;
+			this->cost = cost;
+		}
 };
 
 class Edge {
@@ -32,142 +36,65 @@ class CustomHashFunction {
 	int modulo = 666013; // it is a prime
 	public:
 		size_t operator()(const Edge& edge) const {
-			return (edge.srcVertex * 10 + edge.destVertex * 11) % modulo;
+			return (edge.srcVertex * 7 + edge.destVertex * 11) % modulo;
 		}
 };
 
-class LinkedList {
-	Node* head;
-	int length;
-
+/*class VectorIterator{
+	vector <Node>::iterator head, tail;
 	public:
-		LinkedList() {
-			head = new Node;
-			head = nullptr; // need to differentiate between existing and non existing vertices
-			length = 0;
+		VectorIterator(vector <Node> v) {
+			head = v.begin();
+			tail = v.end();
 		}
 
-		void addNode(int index) {
-			Node* newHead = new Node;
-			newHead->index = index;
-			newHead->next = head;
-			head = newHead;
-			length++;
+		vector <Node>::iterator operator *() {
+			return head;
 		}
 
-		void addNode(int index, int cost) {
-			Node* newHead = new Node;
-			newHead->index = index;
-			newHead->cost = cost;
-			newHead->next = head;
-			head = newHead;
-			length++;
+		VectorIterator operator ++(int) {
+			VectorIterator temp = *this;
+			head = next(head, 1);
+			return temp;
 		}
 
-		void deleteNode(Node* it) {
-			Node* prevNode = head;
-			length--;
-
-			if (head == it) {
-				// the only node
-				if (head->next == nullptr) {
-					delete head;
-					return;
-				}
-
-				head->cost = head->next->cost;
-				head->index = head->next->index;
-				it = head->next;
-				head->next = head->next->next;
-				delete it;
-
-				return;
-			}
-
-			for (Node* crtNode = head->next; crtNode != nullptr; crtNode = crtNode->next) {
-				if (crtNode == it) {
-					prevNode->next = it->next;
-					delete it;
-					return;
-				}
-			}
+		bool hasEnded() {
+			return (head == tail);
 		}
-
-		int getLength() {
-			return length;
-		}
-
-		void copy(const LinkedList &list) {
-			head->index = list.head->index;
-			head->cost = list.head->cost;
-			head->next = list.head->next;
-			head = list.head;
-		}
-
-		class Iterator {
-			Node* nodePtr;
-
-			public:
-				Iterator(Node *newNode){
-					nodePtr = newNode;
-				}
-
-				Node* operator *() const{
-					return nodePtr;
-				}
-
-				Iterator operator ++(int) {
-					Iterator temp = *this;
-					nodePtr = nodePtr->next;
-					return temp;
-				}
-
-				bool hasEnded() {
-					return (nodePtr == nullptr);
-				}
-		};
-
-		Iterator begin() const {
-			return Iterator(head);
-		}
-};
+};*/
 
 class Graph {
 	private:
-		int length;
+		;
 
 	protected:
-		LinkedList* inEdges; // a list of linked lists
-		LinkedList* outEdges;
 		int nrVertices;
 
-		Node* getEdge(int srcVertex, int destVertex, LinkedList *list) {
-			for (auto iter = list[srcVertex].begin(); !iter.hasEnded(); iter++) {
-				if ((*iter)->index == destVertex) {
-					return *iter;
+		vector <vector <Node>> inEdges;
+		vector <vector <Node>> outEdges;
+
+		int getEdge(int srcVertex, int destVertex, vector <vector <Node>> v) {
+			int position = 0;
+			for (auto it = v[srcVertex].begin(); it != v[srcVertex].end(); ++it, ++position) {
+				if (it->index == destVertex) {
+					return position;
 				}
 			}
-			return nullptr;
-		}
-
-		void increaseListSize(LinkedList *list) {
-			LinkedList* temp = new LinkedList[length + 1];
-			for (int i = 0; i < length + 1; i++) {
-				temp[i].copy(list[i]);
-			}
-
-			delete list;
-			list = temp;
+			return -1;
 		}
 
 	public:
 		// constructor
 		Graph(int nrVertices) {
-			inEdges = new LinkedList[nrVertices + 1];
-			outEdges = new LinkedList[nrVertices + 1];
-
 			this->nrVertices = nrVertices;
-			length = nrVertices + 1;
+
+			vector <Node> emptyVector;
+
+			for (int i = 0; i < nrVertices; i++) {
+				inEdges.push_back(emptyVector);
+				outEdges.push_back(emptyVector);
+			}
+
 			cout << "Done with the graph constructor\n";
 		}
 
@@ -176,54 +103,54 @@ class Graph {
 		}
 
 		bool isEdge(int srcVertex, int destVertex) {
-			return (getEdge(srcVertex, destVertex, outEdges) != nullptr);
+			return (getEdge(srcVertex, destVertex, outEdges) != -1);
 		}
 
 		int getInDegree(int vertex) {
-			return inEdges[vertex].getLength();
+			return inEdges[vertex].size();
 		}
 
 		int getOutDegree(int vertex) {
-			return outEdges[vertex].getLength();
+			return outEdges[vertex].size();
 		}
 
-		auto parseInboundEdges(int vertex) {
+		auto beginInboundEdges(int vertex) {
 			return inEdges[vertex].begin();
+			//return VectorIterator(inEdges[vertex]);
 		}
 
-		auto parseOutboundEdges(int vertex) {
+		auto endInboundEdges(int vertex) {
+			return inEdges[vertex].end();
+		}
+
+		auto beginOutboundEdges(int vertex) {
 			return outEdges[vertex].begin();
 		}
 
+		auto endOutboundEdges(int vertex) {
+			return outEdges[vertex].end();
+		}
+
 		void addEdge(int srcVertex, int destVertex) {
-			if (getEdge(srcVertex, destVertex, outEdges) != nullptr) {
+			if (isEdge(srcVertex, destVertex) == true) {
 				throw 1;
 			}
-			outEdges[srcVertex].addNode(destVertex);
-			inEdges[destVertex].addNode(srcVertex);
+			outEdges[srcVertex].push_back(Node(destVertex, 0));
+			inEdges[destVertex].push_back(Node(srcVertex, 0));
 		}
 
 		void removeEdge(int srcVertex, int destVertex) {
-			Node* outEdgePtr = getEdge(srcVertex, destVertex, outEdges);
-			Node* inEdgePtr = getEdge(destVertex, srcVertex, inEdges);
-			if (outEdgePtr == nullptr || inEdgePtr == nullptr) {
-				throw 1; // inexistent edge
+			int inEdgePos = getEdge(destVertex, srcVertex, inEdges);
+			int outEdgePos = getEdge(srcVertex, destVertex, outEdges);
+			if (inEdgePos == -1 or outEdgePos == -1) {
+				throw 1;
 			}
-			outEdges[srcVertex].deleteNode(outEdgePtr);
-			inEdges[destVertex].deleteNode(inEdgePtr);
+			outEdges[srcVertex].erase(outEdges[srcVertex].begin() + outEdgePos);
+			inEdges[destVertex].erase(inEdges[destVertex].begin() + inEdgePos);
 		}
 
 		void addVertex(int index) {
-			index++;
-			if (index >= length) {
-				cout << &(inEdges) << "\n";
-				increaseListSize(inEdges);
-				increaseListSize(outEdges);
-				length *= 2;
-			}
-			if (index > nrVertices) {
-				nrVertices = index;
-			}
+			;
 		}
 
 };
@@ -238,22 +165,25 @@ class WeightedGraph : public Graph {
 		}
 
 		int getEdgeCost(int srcVertex, int destVertex) {
-			if (getEdge(srcVertex, destVertex, Graph::outEdges) == nullptr) {
+			if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
 				throw 1;
 			}
 			return costEdges[Edge(srcVertex, destVertex)];
 		}
 
 		void modifyEdgeCost(int srcVertex, int destVertex, int newCost) {
-			if (getEdge(srcVertex, destVertex, Graph::outEdges) == nullptr) {
+			if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
 				throw 1;
 			}
 			costEdges[Edge(srcVertex, destVertex)] = newCost;
 		}
 
 		void addEdge(int srcVertex, int destVertex, int cost) {
-			Graph::outEdges[srcVertex].addNode(destVertex, cost);
-			Graph::inEdges[destVertex].addNode(srcVertex, cost);
+			if (isEdge(srcVertex, destVertex) == true) {
+				throw 1;
+			}
+			Graph::outEdges[srcVertex].push_back(Node(destVertex, cost));
+			Graph::inEdges[destVertex].push_back(Node(srcVertex, cost));
 			costEdges[Edge(srcVertex, destVertex)] = cost;
 		}
 
@@ -265,8 +195,9 @@ class WeightedGraph : public Graph {
 		void printGraph() {
 			for (int i = 0; i < nrVertices; i++) {
 				cout << i << ": ";
-				for (auto iter = Graph::outEdges[i].begin(); !iter.hasEnded(); iter++)
-					cout << (*iter)->index << " ";
+				for(auto it = Graph::outEdges[i].begin(); it != Graph::outEdges[i].end(); ++it){
+					cout << it->index << " ";
+				}
 				cout << "\n";
 			}
 		}
@@ -356,16 +287,22 @@ int main() {
 				case 5:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.parseInboundEdges(srcVertex); !iter.hasEnded(); iter++)
-						cout << (*iter)->index << " ";
+					//for (auto iter = weightedGraph.parseInboundEdges(srcVertex); !iter.hasEnded(); iter++)
+						//cout << (*iter)->index << " ";
+					for (auto iter = weightedGraph.beginInboundEdges(srcVertex); iter != weightedGraph.endInboundEdges(srcVertex); ++iter) {
+						cout << iter->index << " ";
+					}
 					cout << "\n";
 					break;
 
 				case 6:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.parseOutboundEdges(srcVertex); !iter.hasEnded(); iter++)
-						cout << (*iter)->index << " ";
+					//for (auto iter = weightedGraph.parseOutboundEdges(srcVertex); !iter.hasEnded(); iter++)
+						//cout << (*iter)->index << " ";
+					for (auto iter = weightedGraph.beginOutboundEdges(srcVertex); iter != weightedGraph.endOutboundEdges(srcVertex); ++iter) {
+						cout << iter->index << " ";
+					}
 					cout << "\n";
 					break;
 
