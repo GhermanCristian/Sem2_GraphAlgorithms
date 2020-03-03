@@ -19,14 +19,22 @@ class WeightedGraph(Graph):
         
         del self._dictCost[(srcVertex, destVertex)]
         
+    def removeVertex(self, index):
+        Graph.removeVertex(self, index)
+        
+        #remove all the pairs which contain one of the nodes
+        for pair in self._dictCost:
+            if pair[0] == index or pair[1] == index:
+                del self._dictCost[pair]    
+        
     def getEdgeCost(self, srcVertex, destVertex):
         if self.isEdge(srcVertex, destVertex) == False:
-            return 
+            raise ValueError("Edge doesn't exist")
         return self._dictCost[(srcVertex, destVertex)]
     
     def modifyEdgeCost(self, srcVertex, destVertex, newCost):
         if self.isEdge(srcVertex, destVertex) == False:
-            return
+            raise ValueError("Edge doesn't exist")
         self._dictCost[(srcVertex, destVertex)] = newCost
     
     def saveGraph(self):

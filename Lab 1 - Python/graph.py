@@ -9,7 +9,7 @@ class Graph:
         self._nrVertices = -1
         self._nrEdges = -1
         
-        self._loadGraph(weighted)
+        self.loadGraph(weighted)
         
     def _isVertex(self, index):
         return index in self._dictIn.keys() or index in self._dictOut.keys()    
@@ -22,7 +22,7 @@ class Graph:
         for index in range(self._nrVertices):
             self._newVertex(index)    
         
-    def _loadGraph(self, weighted):
+    def loadGraph(self, weighted):
         '''
         Loads a graph (and its number of vertices/ edges) from a text file
         @param:
@@ -172,6 +172,7 @@ class Graph:
             raise ValueError("Vertex doesn't exist") 
         
         #remove all the edges which have as destination the crt vertex
+        #no need to do this for dictOut[index], because we'll just delete that altogether
         for vertex in self._dictIn[index]:
             self.removeEdge(vertex, index)
         
