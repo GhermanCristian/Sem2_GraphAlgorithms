@@ -19,7 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="customHash.cpp" />
+    <ClCompile Include="edge.cpp" />
+    <ClCompile Include="graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="node.cpp" />
+    <ClCompile Include="weightedGraph.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="customHash.h" />
+    <ClInclude Include="edge.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="node.h" />
+    <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

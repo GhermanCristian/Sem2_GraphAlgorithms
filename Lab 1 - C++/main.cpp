@@ -1,44 +1,7 @@
-#include <iostream>
 #include <fstream>
-#include <unordered_map>
-#include <vector>
+#include <iostream>
+#include "weightedGraph.h"
 using namespace std;
-
-class Node {
-	public:
-		int index = 0;
-		int cost = 0;
-
-		Node(int index, int cost) {
-			this->index = index;
-			this->cost = cost;
-		}
-};
-
-class Edge {
-	public:
-		int srcVertex;
-		int destVertex;
-
-		Edge(int srcVertex, int destVertex) {
-			this->srcVertex = srcVertex;
-			this->destVertex = destVertex;
-		}
-
-		bool operator == (const Edge &newEdge) const {
-			if (this->srcVertex == newEdge.srcVertex)
-				return this->destVertex < newEdge.destVertex;
-			return this->srcVertex < newEdge.srcVertex;
-		}
-};
-
-class CustomHashFunction {
-	int modulo = 666013; // it is a prime
-	public:
-		size_t operator()(const Edge& edge) const {
-			return (edge.srcVertex * 7 + edge.destVertex * 11) % modulo;
-		}
-};
 
 /*class VectorIterator{
 	vector <Node>::iterator head, tail;
@@ -62,146 +25,6 @@ class CustomHashFunction {
 			return (head == tail);
 		}
 };*/
-
-class Graph {
-	private:
-		;
-
-	protected:
-		int nrVertices;
-
-		vector <vector <Node>> inEdges;
-		vector <vector <Node>> outEdges;
-
-		int getEdge(int srcVertex, int destVertex, vector <vector <Node>> v) {
-			int position = 0;
-			for (auto it = v[srcVertex].begin(); it != v[srcVertex].end(); ++it, ++position) {
-				if (it->index == destVertex) {
-					return position;
-				}
-			}
-			return -1;
-		}
-
-	public:
-		// constructor
-		Graph(int nrVertices) {
-			this->nrVertices = nrVertices;
-
-			vector <Node> emptyVector;
-
-			for (int i = 0; i < nrVertices; i++) {
-				inEdges.push_back(emptyVector);
-				outEdges.push_back(emptyVector);
-			}
-
-			cout << "Done with the graph constructor\n";
-		}
-
-		int getNrVertices() {
-			return nrVertices;
-		}
-
-		bool isEdge(int srcVertex, int destVertex) {
-			return (getEdge(srcVertex, destVertex, outEdges) != -1);
-		}
-
-		int getInDegree(int vertex) {
-			return inEdges[vertex].size();
-		}
-
-		int getOutDegree(int vertex) {
-			return outEdges[vertex].size();
-		}
-
-		auto beginInboundEdges(int vertex) {
-			return inEdges[vertex].begin();
-			//return VectorIterator(inEdges[vertex]);
-		}
-
-		auto endInboundEdges(int vertex) {
-			return inEdges[vertex].end();
-		}
-
-		auto beginOutboundEdges(int vertex) {
-			return outEdges[vertex].begin();
-		}
-
-		auto endOutboundEdges(int vertex) {
-			return outEdges[vertex].end();
-		}
-
-		void addEdge(int srcVertex, int destVertex) {
-			if (isEdge(srcVertex, destVertex) == true) {
-				throw 1;
-			}
-			outEdges[srcVertex].push_back(Node(destVertex, 0));
-			inEdges[destVertex].push_back(Node(srcVertex, 0));
-		}
-
-		void removeEdge(int srcVertex, int destVertex) {
-			int inEdgePos = getEdge(destVertex, srcVertex, inEdges);
-			int outEdgePos = getEdge(srcVertex, destVertex, outEdges);
-			if (inEdgePos == -1 or outEdgePos == -1) {
-				throw 1;
-			}
-			outEdges[srcVertex].erase(outEdges[srcVertex].begin() + outEdgePos);
-			inEdges[destVertex].erase(inEdges[destVertex].begin() + inEdgePos);
-		}
-
-		void addVertex(int index) {
-			;
-		}
-
-};
-
-class WeightedGraph : public Graph {
-	unordered_map <Edge, int, CustomHashFunction> costEdges;
-
-	public:
-		WeightedGraph(int nrVertices) : Graph(nrVertices){
-			this->nrVertices = nrVertices;
-			cout << "Done with the weighted graph constructor\n";
-		}
-
-		int getEdgeCost(int srcVertex, int destVertex) {
-			if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
-				throw 1;
-			}
-			return costEdges[Edge(srcVertex, destVertex)];
-		}
-
-		void modifyEdgeCost(int srcVertex, int destVertex, int newCost) {
-			if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
-				throw 1;
-			}
-			costEdges[Edge(srcVertex, destVertex)] = newCost;
-		}
-
-		void addEdge(int srcVertex, int destVertex, int cost) {
-			if (isEdge(srcVertex, destVertex) == true) {
-				throw 1;
-			}
-			Graph::outEdges[srcVertex].push_back(Node(destVertex, cost));
-			Graph::inEdges[destVertex].push_back(Node(srcVertex, cost));
-			costEdges[Edge(srcVertex, destVertex)] = cost;
-		}
-
-		void removeEdge(int srcVertex, int destVertex) {
-			Graph::removeEdge(srcVertex, destVertex);
-			costEdges.erase(Edge(srcVertex, destVertex));
-		}
-
-		void printGraph() {
-			for (int i = 0; i < nrVertices; i++) {
-				cout << i << ": ";
-				for(auto it = Graph::outEdges[i].begin(); it != Graph::outEdges[i].end(); ++it){
-					cout << it->index << " ";
-				}
-				cout << "\n";
-			}
-		}
-};
 
 // with cost
 void loadGraph(int nrEdges, ifstream &in, WeightedGraph &weightedGraph) {
@@ -287,8 +110,6 @@ int main() {
 				case 5:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					//for (auto iter = weightedGraph.parseInboundEdges(srcVertex); !iter.hasEnded(); iter++)
-						//cout << (*iter)->index << " ";
 					for (auto iter = weightedGraph.beginInboundEdges(srcVertex); iter != weightedGraph.endInboundEdges(srcVertex); ++iter) {
 						cout << iter->index << " ";
 					}
@@ -298,8 +119,6 @@ int main() {
 				case 6:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					//for (auto iter = weightedGraph.parseOutboundEdges(srcVertex); !iter.hasEnded(); iter++)
-						//cout << (*iter)->index << " ";
 					for (auto iter = weightedGraph.beginOutboundEdges(srcVertex); iter != weightedGraph.endOutboundEdges(srcVertex); ++iter) {
 						cout << iter->index << " ";
 					}
