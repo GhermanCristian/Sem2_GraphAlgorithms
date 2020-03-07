@@ -2,7 +2,7 @@ from weightedGraph import WeightedGraph
 
 class UI:
     def __init__(self):
-        self.__graph = WeightedGraph(True)
+        self.__graph = WeightedGraph()
     
     def __readIntegers(self, nrIntegers):
         numbers = input("Please insert the numbers: ")
@@ -64,17 +64,17 @@ class UI:
             self.__graph.modifyEdgeCost,    # 3 params
             self.__graph.addEdge,           # 3 params
             self.__graph.removeEdge,        # 2 params
-            self.__graph.addVertex,         # 1 params
+            self.__graph.addVertex,         # 0 params
             self.__graph.removeVertex,      # 1 params
             self.__graph.createCopy,        # 0 params
             self.__graph.printGraph,        # 0 params
             self.__graph.loadGraph,         # 0 params
             self.__graph.saveGraph,         # 0 params
-            19                              # 0 params (not implemented yet)
+            self.__graph.generateRandomGraph# 2 params
         ]
         
         #no of parameters for each command
-        noOfParameters = [0, 0, 0, 2, 1, 1, 1, 1, 0, 2, 3, 3, 2, 1, 1, 0, 0, 0, 0, 0]
+        noOfParameters = [0, 0, 0, 2, 1, 1, 1, 1, 0, 2, 3, 3, 2, 0, 1, 0, 0, 0, 0, 2]
         
         while True:
             command = self.__readIntegers(1)[0]

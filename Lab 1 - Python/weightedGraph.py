@@ -1,13 +1,50 @@
-from graph import Graph
+from graph import Graph, random
 
 class WeightedGraph(Graph):
-    def __init__(self, isOriented):
+    def __init__(self):
         self._dictCost = {}
-        Graph.__init__(self, isOriented, True)
+        Graph.__init__(self)
+    
+    def loadGraph(self):
+        '''
+        Loads a graph (and its number of vertices/ edges) from a text file
+        @param:
+            - None
+        @return:
+            - None
+        '''
+        file = open("graph.txt", "r")
         
-    def _newVertex(self, index):
-        Graph._newVertex(self, index)
-        self._dictCost[index] = []
+        line = file.readline()
+        try:
+            self._nrVertices, self._nrEdges = line.split()
+            self._nrVertices = int(self._nrVertices)
+            #self._nrEdges = int(self._nrEdges)
+            self._nrEdges = 0
+        except Exception as e:
+            return (str(e))
+        
+        self._initEmptyGraph()
+        
+        while True:
+            line = file.readline()
+            
+            if line == "":
+                break
+            
+            line = line[:-1]
+            try:
+                srcVertex, destVertex, cost = line.split()
+                srcVertex = int(srcVertex)
+                destVertex = int(destVertex)
+                cost = int(cost)
+                
+                self.addEdge(srcVertex, destVertex, cost)
+                
+            except Exception as e:
+                return str(e)
+            
+        file.close()
         
     def addEdge(self, srcVertex, destVertex, cost):
         Graph.addEdge(self, srcVertex, destVertex)
@@ -23,7 +60,7 @@ class WeightedGraph(Graph):
         Graph.removeVertex(self, index)
         
         #remove all the pairs which contain one of the nodes
-        for pair in self._dictCost:
+        for pair in self._dictCost.keys():
             if pair[0] == index or pair[1] == index:
                 del self._dictCost[pair]    
         
@@ -49,6 +86,21 @@ class WeightedGraph(Graph):
         
         file.close()
         
+    def generateRandomGraph(self, nrVertices, nrEdges):
+        self._nrVertices = nrVertices
+        self._nrEdges = 0
+        
+        self._initEmptyGraph()
+        
+        while (self._nrEdges < nrEdges):
+            srcVertex = random.randint(0, nrVertices - 1)
+            destVertex = random.randint(0, nrVertices - 1)
+            try:
+                cost = random.randint(-100, 100)
+                self.addEdge(srcVertex, destVertex, cost)
+            except:
+                pass
+
     def printGraph(self):
         print ("Out graph")
         for i in self._dictOut:
