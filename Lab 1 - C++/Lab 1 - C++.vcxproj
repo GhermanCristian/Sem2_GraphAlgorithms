@@ -22,6 +22,7 @@
     <ClCompile Include="customHash.cpp" />
     <ClCompile Include="edge.cpp" />
     <ClCompile Include="graph.cpp" />
+    <ClCompile Include="vectorIterator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="node.cpp" />
     <ClCompile Include="weightedGraph.cpp" />
@@ -30,6 +31,7 @@
     <ClInclude Include="customHash.h" />
     <ClInclude Include="edge.h" />
     <ClInclude Include="graph.h" />
+    <ClInclude Include="vectorIterator.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>

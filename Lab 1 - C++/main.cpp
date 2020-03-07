@@ -3,49 +3,34 @@
 #include "weightedGraph.h"
 using namespace std;
 
-/*class VectorIterator{
-	vector <Node>::iterator head, tail;
-	public:
-		VectorIterator(vector <Node> v) {
-			head = v.begin();
-			tail = v.end();
-		}
-
-		vector <Node>::iterator operator *() {
-			return head;
-		}
-
-		VectorIterator operator ++(int) {
-			VectorIterator temp = *this;
-			head = next(head, 1);
-			return temp;
-		}
-
-		bool hasEnded() {
-			return (head == tail);
-		}
-};*/
-
 // with cost
-void loadGraph(int nrEdges, ifstream &in, WeightedGraph &weightedGraph) {
+void loadGraph(WeightedGraph &weightedGraph) {
 	int srcVertex;
 	int destVertex;
 	int cost;
+	int nrVertices, nrEdges;
+	WeightedGraph newGraph;
+	weightedGraph = newGraph;
 
+	ifstream in("graph.txt");
+
+	in >> nrVertices >> nrEdges;
+	for (int i = 0; i < nrVertices; i++) {
+		weightedGraph.addVertex();
+	}
 	for (int i = 0; i < nrEdges; i++) {
 		in >> srcVertex >> destVertex >> cost;
 		weightedGraph.addEdge(srcVertex, destVertex, cost);
 	}
+
+	in.close();
 }
 
 int main() {
-	int nrVertices, nrEdges;
 	int command;
 	int srcVertex, destVertex, cost;
-	ifstream in("graph.txt");
-
-	in >> nrVertices >> nrEdges;
-	WeightedGraph weightedGraph(nrVertices);
+	
+	WeightedGraph weightedGraph;
 	{
 		cout << "Please insert the command: \n";
 		cout << "0. Exit\n";
@@ -83,8 +68,10 @@ int main() {
 					break;
 
 				case 2:
-					for (int i = 0; i < weightedGraph.getNrVertices(); i++) {
-						cout << i << " ";
+					for (int i = 0; i < weightedGraph.getTotalNrVertices(); i++) {
+						if (weightedGraph.isActiveVertex(i)) {
+							cout << i << " ";
+						}
 					}
 					cout << "\n";
 					break;
@@ -110,8 +97,8 @@ int main() {
 				case 5:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.beginInboundEdges(srcVertex); iter != weightedGraph.endInboundEdges(srcVertex); ++iter) {
-						cout << iter->index << " ";
+					for (auto iter = weightedGraph.inEdgesIterator(srcVertex); iter.isValid(); iter++) {
+						cout << (*iter).index << " ";
 					}
 					cout << "\n";
 					break;
@@ -119,8 +106,8 @@ int main() {
 				case 6:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.beginOutboundEdges(srcVertex); iter != weightedGraph.endOutboundEdges(srcVertex); ++iter) {
-						cout << iter->index << " ";
+					for (auto iter = weightedGraph.outEdgesIterator(srcVertex); iter.isValid(); iter++) {
+						cout << (*iter).index << " ";
 					}
 					cout << "\n";
 					break;
@@ -153,12 +140,13 @@ int main() {
 					break;
 
 				case 12:
-					cout << "Insert srcVertex:\n";
-					cin >> srcVertex;
-					weightedGraph.addVertex(srcVertex);
+					weightedGraph.addVertex();
 					break;
 
 				case 13:
+					cout << "Insert vertex\n";
+					cin >> srcVertex;
+					weightedGraph.removeVertex(srcVertex);
 					break;
 
 				case 14:
@@ -169,7 +157,7 @@ int main() {
 					break;
 
 				case 16:
-					loadGraph(nrEdges, in, weightedGraph);
+					loadGraph(weightedGraph);
 					break;
 
 				case 17:
@@ -188,6 +176,5 @@ int main() {
 		
 	}
 
-	in.close();
 	return 0;
 }
