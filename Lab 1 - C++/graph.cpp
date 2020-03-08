@@ -13,7 +13,7 @@ int Graph::getEdge(int srcVertex, int destVertex, vector <vector <Node>> v) {
 	return -1;
 }
 
-// deleted vertices will be marked with -1
+// deleted vertices will be marked with (-1, -1)
 // isolated vertices will be marked with an empty vector
 bool Graph::isActiveVertex(int vertex) {
 	return vertex < nrTotalVertices && !(inEdges[vertex].size() == 1 and inEdges[vertex][0] == Node(-1, -1));
@@ -22,6 +22,7 @@ bool Graph::isActiveVertex(int vertex) {
 Graph::Graph() {
 	nrActiveVertices = 0; // this will be decreased when removing a vertex
 	nrTotalVertices = 0;
+	nrEdges = 0;
 
 	vector <Node> emptyVector;
 
@@ -31,6 +32,10 @@ Graph::Graph() {
 	}
 
 	cout << "Done with the graph constructor\n";
+}
+
+int Graph::getNrEdges() {
+	return nrEdges;
 }
 
 int Graph::getTotalNrVertices() {
@@ -63,11 +68,11 @@ VectorIterator Graph::outEdgesIterator(int vertex) {
 
 void Graph::addEdge(int srcVertex, int destVertex) {
 	if (isEdge(srcVertex, destVertex) == true) {
-		cout << "error ?\n";
 		throw 1;
 	}
 	outEdges[srcVertex].push_back(Node(destVertex, 0));
 	inEdges[destVertex].push_back(Node(srcVertex, 0));
+	nrEdges++;
 }
 
 void Graph::removeEdge(int srcVertex, int destVertex) {
@@ -78,6 +83,7 @@ void Graph::removeEdge(int srcVertex, int destVertex) {
 	}
 	outEdges[srcVertex].erase(outEdges[srcVertex].begin() + outEdgePos);
 	inEdges[destVertex].erase(inEdges[destVertex].begin() + inEdgePos);
+	nrEdges--;
 }
 
 void Graph::addVertex() {

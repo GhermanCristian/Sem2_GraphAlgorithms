@@ -26,9 +26,46 @@ void loadGraph(WeightedGraph &weightedGraph) {
 	in.close();
 }
 
+// deleted nodes will be re-added to the file, and they will be isolated
+void saveGraph(WeightedGraph& weightedGraph) {
+	ofstream out("graph.txt");
+	out << weightedGraph.getTotalNrVertices() << " " << weightedGraph.getNrEdges() << "\n";
+	for (int i = 0; i < weightedGraph.getTotalNrVertices(); i++) {
+		if (weightedGraph.isActiveVertex(i)) {
+			for (auto iter = weightedGraph.outEdgesIterator(i); iter.isValid(); ++iter) {
+				out << i << " " << (*iter).index << " " << weightedGraph.getEdgeCost(i, (*iter).index) << "\n";
+			}
+		}
+	}
+	out.close();
+}
+
+void generateRandomGraph(WeightedGraph& weightedGraph, int nrVertices, int nrEdges) {
+	int srcVertex, destVertex, cost;
+	WeightedGraph newGraph;
+	weightedGraph = newGraph;
+	
+	
+	for (int i = 0; i < nrVertices; i++) {
+		weightedGraph.addVertex();
+	}
+	while (nrEdges > 0) {
+		srcVertex = rand() % nrVertices;
+		destVertex = rand() % nrVertices;
+		try {
+			cost = rand() % 100;
+			weightedGraph.addEdge(srcVertex, destVertex, cost);
+			nrEdges--;
+		}
+		catch (...) {
+			;
+		}
+	}
+}
+
 int main() {
 	int command;
-	int srcVertex, destVertex, cost;
+	int srcVertex, destVertex, cost, nrVertices, nrEdges;
 	
 	WeightedGraph weightedGraph;
 	{
@@ -97,7 +134,7 @@ int main() {
 				case 5:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.inEdgesIterator(srcVertex); iter.isValid(); iter++) {
+					for (auto iter = weightedGraph.inEdgesIterator(srcVertex); iter.isValid(); ++iter) {
 						cout << (*iter).index << " ";
 					}
 					cout << "\n";
@@ -106,7 +143,7 @@ int main() {
 				case 6:
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
-					for (auto iter = weightedGraph.outEdgesIterator(srcVertex); iter.isValid(); iter++) {
+					for (auto iter = weightedGraph.outEdgesIterator(srcVertex); iter.isValid(); ++iter) {
 						cout << (*iter).index << " ";
 					}
 					cout << "\n";
@@ -150,6 +187,8 @@ int main() {
 					break;
 
 				case 14:
+					//this works fine, but the switch statement is stupid
+					//WeightedGraph newGraph = weightedGraph;
 					break;
 
 				case 15:
@@ -161,9 +200,12 @@ int main() {
 					break;
 
 				case 17:
-					break;
+					saveGraph(weightedGraph);
 
 				case 18:
+					cout << "Insert nrVertices nrEdges\n";
+					cin >> nrVertices >> nrEdges;
+					generateRandomGraph(weightedGraph, nrVertices, nrEdges);
 					break;
 
 				default:

@@ -14,4 +14,5 @@ class WeightedGraph : public Graph {
 		void removeEdge(int srcVertex, int destVertex);
 		void printGraph();
 		void removeVertex(int vertex);
+		WeightedGraph(const WeightedGraph& originalGraph);
 };

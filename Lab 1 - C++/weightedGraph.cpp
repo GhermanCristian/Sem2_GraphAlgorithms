@@ -25,7 +25,9 @@ void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost) {
 	}
 	Graph::outEdges[srcVertex].push_back(Node(destVertex, cost));
 	Graph::inEdges[destVertex].push_back(Node(srcVertex, cost));
-	costEdges[Edge(srcVertex, destVertex)] = cost;
+	Edge newEdge(srcVertex, destVertex);
+	costEdges[newEdge] = cost;
+	nrEdges++;
 }
 
 void WeightedGraph::removeEdge(int srcVertex, int destVertex) {
@@ -37,11 +39,9 @@ void WeightedGraph::removeEdge(int srcVertex, int destVertex) {
 void WeightedGraph::printGraph() {
 	for (int i = 0; i < nrTotalVertices; i++) {
 		if (isActiveVertex(i)) {
-			cout << i << ": ";
 			for (auto it = Graph::outEdges[i].begin(); it != Graph::outEdges[i].end(); ++it) {
-				cout << it->index << " ";
+				cout << i << " " << it->index << " " << getEdgeCost(i, it->index) << "\n";
 			}
-			cout << "\n";
 		}
 	}
 }
@@ -53,4 +53,13 @@ void WeightedGraph::removeVertex(int vertex) {
 			costEdges.erase(Edge((iter.first).srcVertex, (iter.first).destVertex));
 		}
 	}
+}
+
+WeightedGraph::WeightedGraph(const WeightedGraph& originalGraph) {
+	this->nrActiveVertices = originalGraph.nrActiveVertices;
+	this->nrTotalVertices = originalGraph.nrTotalVertices;
+	this->nrEdges = originalGraph.nrEdges;
+	this->inEdges = originalGraph.inEdges;
+	this->outEdges = originalGraph.outEdges;
+	this->costEdges = originalGraph.costEdges;
 }

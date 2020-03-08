@@ -7,7 +7,5 @@ Edge::Edge(int srcVertex, int destVertex) {
 }
 
 bool Edge::operator == (const Edge& newEdge) const {
-	if (this->srcVertex == newEdge.srcVertex)
-		return this->destVertex < newEdge.destVertex;
-	return this->srcVertex < newEdge.srcVertex;
+	return (this->srcVertex == newEdge.srcVertex && this->destVertex == newEdge.destVertex);
 }

@@ -10,6 +10,6 @@ class VectorIterator {
 	public:
 		VectorIterator(vector <Node> v);
 		bool isValid();
-		VectorIterator operator ++(int);
+		void operator ++();
 		Node operator *();
 };

@@ -12,6 +12,7 @@ class Graph {
 	protected:
 		int nrActiveVertices;
 		int nrTotalVertices;
+		int nrEdges;
 		vector <vector <Node>> inEdges;
 		vector <vector <Node>> outEdges;
 
@@ -21,6 +22,7 @@ class Graph {
 	public:
 		Graph();
 		int getTotalNrVertices();
+		int getNrEdges();
 		int getNrVertices();
 		bool isActiveVertex(int vertex);
 		bool isEdge(int srcVertex, int destVertex);

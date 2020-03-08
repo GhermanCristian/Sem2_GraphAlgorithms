@@ -9,12 +9,10 @@ bool VectorIterator::isValid() {
 	return (currentPos < iterable.size());
 }
 
-VectorIterator VectorIterator::operator ++(int) {
-	VectorIterator temporaryIterator = *this;
+void VectorIterator::operator ++() {
 	if (isValid()) {
 		currentPos++;
 	}
-	return temporaryIterator;
 }
 
 Node VectorIterator::operator*() {
@@ -23,6 +21,7 @@ Node VectorIterator::operator*() {
 	}
 	return iterable[currentPos];
 }
+
 
 
 
