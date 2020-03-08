@@ -117,3 +117,11 @@ void Graph::removeVertex(int vertex) {
 
 	nrActiveVertices--;
 }
+
+void Graph::clearGraph() {
+	nrActiveVertices = 0;
+	nrTotalVertices = 0;
+	nrEdges = 0;
+	inEdges.clear();
+	outEdges.clear();
+}

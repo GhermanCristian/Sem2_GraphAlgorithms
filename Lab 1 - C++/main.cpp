@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "weightedGraph.h"
+
 using namespace std;
 
 // with cost
@@ -9,8 +10,7 @@ void loadGraph(WeightedGraph &weightedGraph) {
 	int destVertex;
 	int cost;
 	int nrVertices, nrEdges;
-	WeightedGraph newGraph;
-	weightedGraph = newGraph;
+	weightedGraph.clearGraph();
 
 	ifstream in("graph.txt");
 
@@ -42,8 +42,7 @@ void saveGraph(WeightedGraph& weightedGraph) {
 
 void generateRandomGraph(WeightedGraph& weightedGraph, int nrVertices, int nrEdges) {
 	int srcVertex, destVertex, cost;
-	WeightedGraph newGraph;
-	weightedGraph = newGraph;
+	weightedGraph.clearGraph();
 	
 	
 	for (int i = 0; i < nrVertices; i++) {

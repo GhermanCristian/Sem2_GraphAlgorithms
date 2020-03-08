@@ -63,3 +63,8 @@ WeightedGraph::WeightedGraph(const WeightedGraph& originalGraph) {
 	this->outEdges = originalGraph.outEdges;
 	this->costEdges = originalGraph.costEdges;
 }
+
+void WeightedGraph::clearGraph(){
+	Graph::clearGraph();
+	costEdges.clear();
+}

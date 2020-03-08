@@ -21,6 +21,7 @@ class Graph {
 
 	public:
 		Graph();
+		void clearGraph();
 		int getTotalNrVertices();
 		int getNrEdges();
 		int getNrVertices();

@@ -8,6 +8,7 @@ class WeightedGraph : public Graph {
 
 	public:
 		WeightedGraph();
+		void clearGraph();
 		int getEdgeCost(int srcVertex, int destVertex);
 		void modifyEdgeCost(int srcVertex, int destVertex, int newCost);
 		void addEdge(int srcVertex, int destVertex, int cost);
