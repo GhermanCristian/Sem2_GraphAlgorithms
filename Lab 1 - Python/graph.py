@@ -118,7 +118,8 @@ class Graph:
         @return:
             - A list of the active vertices in the graph
         '''
-        return list(self._dictIn.keys())
+        for vertex in self._dictIn.keys():
+            yield vertex
     
     def isEdge(self, srcVertex, destVertex):
         '''
@@ -178,7 +179,8 @@ class Graph:
         if self._isActiveVertex(vertex) == False:
             raise ValueError("Vertex doesn't exist")
         
-        return self._dictIn[vertex]
+        for neighbor in self._dictIn[vertex]:
+            yield neighbor
     
     def getOutEdges(self, vertex):
         '''
@@ -193,7 +195,8 @@ class Graph:
         if self._isActiveVertex(vertex) == False:
             raise ValueError("Vertex doesn't exist")
         
-        return self._dictOut[vertex]  
+        for neighbor in self._dictOut[vertex]:
+            yield neighbor
         
     def addEdge(self, srcVertex, destVertex):
         '''

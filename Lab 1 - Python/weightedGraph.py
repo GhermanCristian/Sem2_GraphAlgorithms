@@ -6,6 +6,13 @@ class WeightedGraph(Graph):
         Graph.__init__(self)
     
     def _initEmptyGraph(self):
+        '''
+        Initialises an empty graph with a given number of vertices
+        @param:
+            - None
+        @return:
+            - None
+        '''
         Graph._initEmptyGraph(self)
         self._dictCost.clear()
     
@@ -23,7 +30,6 @@ class WeightedGraph(Graph):
         try:
             self._nrVertices, self._nrEdges = line.split()
             self._nrVertices = self._nextVertex = int(self._nrVertices)
-            #self._nrEdges = int(self._nrEdges)
             self._nrEdges = 0
         except Exception as e:
             return (str(e))
@@ -161,6 +167,7 @@ class WeightedGraph(Graph):
         self._nrEdges = 0
         
         self._initEmptyGraph()
+        print ("here")
         
         while (self._nrEdges < nrEdges):
             srcVertex = random.randint(0, nrVertices - 1)
