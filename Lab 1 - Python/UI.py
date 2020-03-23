@@ -21,9 +21,14 @@ class UI:
     def __printEdges(self, srcVertex, neighbourList, direction):
         for nbr in neighbourList:
             if direction == 1:
-                print ("%d %d" % (srcVertex, nbr))
+                print ("%d -> %d" % (srcVertex, nbr))
             else: #direction = 0
-                print ("%d %d" % (nbr, srcVertex))
+                print ("%d -> %d" % (nbr, srcVertex))
+                
+    def __printVertices(self, vertexGenerator):
+        for vertex in vertexGenerator:
+            print (vertex, end = " ")
+        print ()
     
     def start(self):
         print("""
@@ -96,10 +101,13 @@ class UI:
                 elif noOfParameters[command] == 3:
                     result = commandList[command](params[0], params[1], params[2])
                     
+                if command == 2:
+                    self.__printVertices(result)
+                    
                 if command in [6, 7]:
                     self.__printEdges(params[0], result, command == 7)
                     
-                elif command in [1, 2, 3, 4, 5, 9]:
+                elif command in [1, 3, 4, 5, 9]:
                     print (result)
                     
             except Exception as e:
