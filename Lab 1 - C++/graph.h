@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
-#include "node.h"
+#include "adjacentVertex.h"
 #include "vectorIterator.h"
 
 using namespace std;
+typedef vector <vector <AdjacentVertex>> AdjacentVertexList;
 
 class Graph {
 	private:
@@ -13,14 +14,14 @@ class Graph {
 		int nrActiveVertices;
 		int nrTotalVertices;
 		int nrEdges;
-		vector <vector <Node>> inEdges;
-		vector <vector <Node>> outEdges;
+		AdjacentVertexList inEdges;
+		AdjacentVertexList outEdges;
 
-		int getEdge(int srcVertex, int destVertex, vector <vector <Node>> v);
+		int getEdge(int srcVertex, int destVertex, AdjacentVertexList v);
 		
-
 	public:
 		Graph();
+		void initEmptyGraph(int nrVertices);
 		void clearGraph();
 		int getTotalNrVertices();
 		int getNrEdges();

@@ -3,10 +3,10 @@
 
 using namespace std;
 
-int Graph::getEdge(int srcVertex, int destVertex, vector <vector <Node>> v) {
+int Graph::getEdge(int srcVertex, int destVertex, AdjacentVertexList v) {
 	int position = 0;
-	for (auto it = v[srcVertex].begin(); it != v[srcVertex].end(); ++it, ++position) {
-		if (it->index == destVertex) {
+	for (VectorIterator iter(v[srcVertex]); iter.isValid(); ++iter, ++position) {
+		if ((*iter).index == destVertex) {
 			return position;
 		}
 	}
@@ -16,22 +16,22 @@ int Graph::getEdge(int srcVertex, int destVertex, vector <vector <Node>> v) {
 // deleted vertices will be marked with (-1, -1)
 // isolated vertices will be marked with an empty vector
 bool Graph::isActiveVertex(int vertex) {
-	return vertex < nrTotalVertices && !(inEdges[vertex].size() == 1 and inEdges[vertex][0] == Node(-1, -1));
+	return vertex < nrTotalVertices and !(inEdges[vertex].size() == 1 and inEdges[vertex][0] == AdjacentVertex(-1, -1));
 }
 
 Graph::Graph() {
 	nrActiveVertices = 0; // this will be decreased when removing a vertex
-	nrTotalVertices = 0;
+	nrTotalVertices = 0; // this will not ^
 	nrEdges = 0;
+	cout << "Done with the graph constructor\n";
+}
 
-	vector <Node> emptyVector;
-
-	for (int i = 0; i < nrTotalVertices; i++) {
+void Graph::initEmptyGraph(int nrVertices){
+	vector <AdjacentVertex> emptyVector;
+	for (int i = 0; i < nrVertices; i++) {
 		inEdges.push_back(emptyVector);
 		outEdges.push_back(emptyVector);
 	}
-
-	cout << "Done with the graph constructor\n";
 }
 
 int Graph::getNrEdges() {
@@ -70,8 +70,9 @@ void Graph::addEdge(int srcVertex, int destVertex) {
 	if (isEdge(srcVertex, destVertex) == true) {
 		throw 1;
 	}
-	outEdges[srcVertex].push_back(Node(destVertex, 0));
-	inEdges[destVertex].push_back(Node(srcVertex, 0));
+
+	outEdges[srcVertex].push_back(AdjacentVertex(destVertex, 0));
+	inEdges[destVertex].push_back(AdjacentVertex(srcVertex, 0));
 	nrEdges++;
 }
 
@@ -87,7 +88,7 @@ void Graph::removeEdge(int srcVertex, int destVertex) {
 }
 
 void Graph::addVertex() {
-	vector <Node> emptyVector;
+	vector <AdjacentVertex> emptyVector;
 	inEdges.push_back(emptyVector);
 	outEdges.push_back(emptyVector);
 	nrActiveVertices++;
@@ -99,21 +100,21 @@ void Graph::removeVertex(int vertex) {
 		throw 1;
 	}
 
-	vector <Node> temporary;
+	vector <AdjacentVertex> temporary;
 
 	temporary = inEdges[vertex];
-	for (int index = 0; index < temporary.size(); index++) {
-		removeEdge(temporary[index].index, vertex);
+	for (VectorIterator iter(temporary); iter.isValid(); ++iter) {
+		removeEdge((*iter).index, vertex);
 	}
 	inEdges[vertex].clear();
-	inEdges[vertex].push_back(Node(-1, -1));
+	inEdges[vertex].push_back(AdjacentVertex(-1, -1));
 
 	temporary = outEdges[vertex];
-	for (int index = 0; index < temporary.size(); index++) {
-		removeEdge(vertex, temporary[index].index);
+	for (VectorIterator iter(temporary); iter.isValid(); ++iter) {
+		removeEdge(vertex, (*iter).index);
 	}
 	outEdges[vertex].clear();
-	outEdges[vertex].push_back(Node(-1, -1));
+	outEdges[vertex].push_back(AdjacentVertex(-1, -1));
 
 	nrActiveVertices--;
 }

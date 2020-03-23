@@ -23,8 +23,8 @@ void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost) {
 	if (isEdge(srcVertex, destVertex) == true) {
 		throw 1;
 	}
-	Graph::outEdges[srcVertex].push_back(Node(destVertex, cost));
-	Graph::inEdges[destVertex].push_back(Node(srcVertex, cost));
+	Graph::outEdges[srcVertex].push_back(AdjacentVertex(destVertex, cost));
+	Graph::inEdges[destVertex].push_back(AdjacentVertex(srcVertex, cost));
 	Edge newEdge(srcVertex, destVertex);
 	costEdges[newEdge] = cost;
 	nrEdges++;
@@ -33,7 +33,6 @@ void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost) {
 void WeightedGraph::removeEdge(int srcVertex, int destVertex) {
 	Graph::removeEdge(srcVertex, destVertex);
 	costEdges.erase(Edge(srcVertex, destVertex));
-	cout << "rem edge from weighted\n";
 }
 
 void WeightedGraph::printGraph() {
@@ -47,12 +46,10 @@ void WeightedGraph::printGraph() {
 }
 
 void WeightedGraph::removeVertex(int vertex) {
-	Graph::removeVertex(vertex);
-	for (auto iter : costEdges) {
-		if ((iter.first).srcVertex == vertex || (iter.first).destVertex == vertex) {
-			costEdges.erase(Edge((iter.first).srcVertex, (iter.first).destVertex));
-		}
+	for (VectorIterator iter(outEdges[vertex]); iter.isValid(); ++iter) {
+		costEdges.erase(Edge(vertex, (*iter).index));
 	}
+	Graph::removeVertex(vertex);
 }
 
 WeightedGraph::WeightedGraph(const WeightedGraph& originalGraph) {
@@ -62,6 +59,18 @@ WeightedGraph::WeightedGraph(const WeightedGraph& originalGraph) {
 	this->inEdges = originalGraph.inEdges;
 	this->outEdges = originalGraph.outEdges;
 	this->costEdges = originalGraph.costEdges;
+}
+
+WeightedGraph& WeightedGraph::operator=(const WeightedGraph& originalGraph){
+	if (this != &originalGraph) {
+		this->nrActiveVertices = originalGraph.nrActiveVertices;
+		this->nrTotalVertices = originalGraph.nrTotalVertices;
+		this->nrEdges = originalGraph.nrEdges;
+		this->inEdges = originalGraph.inEdges;
+		this->outEdges = originalGraph.outEdges;
+		this->costEdges = originalGraph.costEdges;
+	}
+	return *this;
 }
 
 void WeightedGraph::clearGraph(){

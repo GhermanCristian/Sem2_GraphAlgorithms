@@ -7,6 +7,5 @@ class Edge {
 		int destVertex;
 
 		Edge(int srcVertex, int destVertex);
-
 		bool operator == (const Edge& newEdge) const;
 };

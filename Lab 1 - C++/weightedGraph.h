@@ -16,4 +16,5 @@ class WeightedGraph : public Graph {
 		void printGraph();
 		void removeVertex(int vertex);
 		WeightedGraph(const WeightedGraph& originalGraph);
+		WeightedGraph& operator = (const WeightedGraph& originalGraph); 
 };

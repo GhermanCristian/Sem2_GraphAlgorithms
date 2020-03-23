@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// with cost
 void loadGraph(WeightedGraph &weightedGraph) {
 	int srcVertex;
 	int destVertex;
@@ -43,7 +42,6 @@ void saveGraph(WeightedGraph& weightedGraph) {
 void generateRandomGraph(WeightedGraph& weightedGraph, int nrVertices, int nrEdges) {
 	int srcVertex, destVertex, cost;
 	weightedGraph.clearGraph();
-	
 	
 	for (int i = 0; i < nrVertices; i++) {
 		weightedGraph.addVertex();
@@ -186,8 +184,11 @@ int main() {
 					break;
 
 				case 14:
-					//this works fine, but the switch statement is stupid
-					//WeightedGraph newGraph = weightedGraph;
+					{
+						WeightedGraph newGraph;
+						newGraph = weightedGraph;
+					}
+					
 					break;
 
 				case 15:
@@ -200,6 +201,7 @@ int main() {
 
 				case 17:
 					saveGraph(weightedGraph);
+					break;
 
 				case 18:
 					cout << "Insert nrVertices nrEdges\n";
