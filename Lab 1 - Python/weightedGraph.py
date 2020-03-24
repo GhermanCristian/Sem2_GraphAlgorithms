@@ -49,14 +49,14 @@ class WeightedGraph(Graph):
                 destVertex = int(destVertex)
                 cost = int(cost)
                 
-                self.addEdge(srcVertex, destVertex, cost)
+                self.addEdge(srcVertex, destVertex, cost, False)
                 
             except Exception as e:
                 return str(e)
             
         file.close()
         
-    def addEdge(self, srcVertex, destVertex, cost):
+    def addEdge(self, srcVertex, destVertex, cost, doChecks = True):
         '''
         Adds a new edge to the graph
         @param:
@@ -67,7 +67,7 @@ class WeightedGraph(Graph):
             - ValueError, if either of the vertices doesn't exist or if the edge already exists
         '''
         #the 'parent' function checks for the validity of the operation, no need to do it here
-        Graph.addEdge(self, srcVertex, destVertex)
+        Graph.addEdge(self, srcVertex, destVertex, doChecks)
         
         self._dictCost[(srcVertex, destVertex)] = cost
     
@@ -147,7 +147,7 @@ class WeightedGraph(Graph):
         '''
         file = open("graph.txt", "w")
         
-        file.write("%d %d\n" % (self._nrVertices, self._nrEdges))
+        file.write("%d %d\n" % (self._nextVertex, self._nrEdges))
         for vertex in self._dictOut.keys():
             for neighbour in self._dictOut[vertex]:
                 file.write("%d %d %d\n" % (vertex, neighbour, self._dictCost[(vertex, neighbour)]))
@@ -163,11 +163,13 @@ class WeightedGraph(Graph):
         @return:
             - None
         '''
+        if nrVertices * nrVertices < nrEdges:
+            raise ValueError("Invalid number of vertices/ edges")
+        
         self._nrVertices = self._nextVertex = nrVertices
         self._nrEdges = 0
         
         self._initEmptyGraph()
-        print ("here")
         
         while (self._nrEdges < nrEdges):
             srcVertex = random.randint(0, nrVertices - 1)

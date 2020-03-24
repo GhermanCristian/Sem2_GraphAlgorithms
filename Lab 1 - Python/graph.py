@@ -76,7 +76,7 @@ class Graph:
                 srcVertex = int(srcVertex)
                 destVertex = int(destVertex)
                 
-                self.addEdge(srcVertex, destVertex)
+                self.addEdge(srcVertex, destVertex, False)
                 
             except Exception as e:
                 return str(e)
@@ -93,7 +93,7 @@ class Graph:
         '''
         file = open("graph.txt", "w")
         
-        file.write("%d %d\n" % (self._nrVertices, self._nrEdges))
+        file.write("%d %d\n" % (self._nextVertex, self._nrEdges))
         for vertex in self._dictOut.keys():
             for neighbour in self._dictOut[vertex]:
                 file.write("%d %d\n" % (vertex, neighbour))
@@ -198,7 +198,7 @@ class Graph:
         for neighbor in self._dictOut[vertex]:
             yield neighbor
         
-    def addEdge(self, srcVertex, destVertex):
+    def addEdge(self, srcVertex, destVertex, doChecks = True):
         '''
         Adds a new edge to the graph
         @param:
@@ -210,10 +210,11 @@ class Graph:
             - ValueError, if either of the vertices doesn't exist or if the edge already exists
         '''
         #the edge already exists
-        if self._isActiveVertex(srcVertex) == False or self._isActiveVertex(destVertex) == False:
-            raise ValueError("Invalid vertices")
-        if self.isEdge(srcVertex, destVertex) == True:
-            raise ValueError("Edge already exists")
+        if doChecks == True:
+            if self._isActiveVertex(srcVertex) == False or self._isActiveVertex(destVertex) == False:
+                raise ValueError("Invalid vertices")
+            if self.isEdge(srcVertex, destVertex) == True:
+                raise ValueError("Edge already exists")
         
         self._dictIn[destVertex].append(srcVertex)
         self._dictOut[srcVertex].append(destVertex)
@@ -300,6 +301,9 @@ class Graph:
         @return:
             - None
         '''
+        if nrVertices * nrVertices < nrEdges:
+            raise ValueError("Invalid number of vertices/ edges")
+        
         self._nrVertices = self._nextVertex = nrVertices
         self._nrEdges = 0
         
