@@ -5,22 +5,22 @@ WeightedGraph::WeightedGraph() : Graph() {
 	cout << "Done with the weighted graph constructor\n";
 }
 
-int WeightedGraph::getEdgeCost(int srcVertex, int destVertex) {
-	if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
+int WeightedGraph::getEdgeCost(int srcVertex, int destVertex, bool doChecks) {
+	if (doChecks == true and getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
 		throw 1;
 	}
 	return costEdges[Edge(srcVertex, destVertex)];
 }
 
-void WeightedGraph::modifyEdgeCost(int srcVertex, int destVertex, int newCost) {
-	if (getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
+void WeightedGraph::modifyEdgeCost(int srcVertex, int destVertex, int newCost, bool doChecks) {
+	if (doChecks == true and getEdge(srcVertex, destVertex, Graph::outEdges) == -1) {
 		throw 1;
 	}
 	costEdges[Edge(srcVertex, destVertex)] = newCost;
 }
 
-void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost) {
-	if (isEdge(srcVertex, destVertex) == true) {
+void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost, bool doChecks) {
+	if (doChecks == true and (isActiveVertex(srcVertex) == false or isActiveVertex(destVertex) == false or isEdge(srcVertex, destVertex))) {
 		throw 1;
 	}
 	Graph::outEdges[srcVertex].push_back(AdjacentVertex(destVertex, cost));
@@ -36,12 +36,8 @@ void WeightedGraph::removeEdge(int srcVertex, int destVertex) {
 }
 
 void WeightedGraph::printGraph() {
-	for (int i = 0; i < nrTotalVertices; i++) {
-		if (isActiveVertex(i)) {
-			for (auto it = Graph::outEdges[i].begin(); it != Graph::outEdges[i].end(); ++it) {
-				cout << i << " " << it->index << " " << getEdgeCost(i, it->index) << "\n";
-			}
-		}
+	for (auto costEdgesIter : costEdges) {
+		cout << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.srcVertex << " " << costEdgesIter.second << "\n";
 	}
 }
 

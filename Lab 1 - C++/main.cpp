@@ -19,7 +19,7 @@ void loadGraph(WeightedGraph &weightedGraph) {
 	}
 	for (int i = 0; i < nrEdges; i++) {
 		in >> srcVertex >> destVertex >> cost;
-		weightedGraph.addEdge(srcVertex, destVertex, cost);
+		weightedGraph.addEdge(srcVertex, destVertex, cost, false);
 	}
 
 	in.close();
@@ -29,13 +29,10 @@ void loadGraph(WeightedGraph &weightedGraph) {
 void saveGraph(WeightedGraph& weightedGraph) {
 	ofstream out("graph.txt");
 	out << weightedGraph.getTotalNrVertices() << " " << weightedGraph.getNrEdges() << "\n";
-	for (int i = 0; i < weightedGraph.getTotalNrVertices(); i++) {
-		if (weightedGraph.isActiveVertex(i)) {
-			for (auto iter = weightedGraph.outEdgesIterator(i); iter.isValid(); ++iter) {
-				out << i << " " << (*iter).index << " " << weightedGraph.getEdgeCost(i, (*iter).index) << "\n";
-			}
-		}
+	for (auto costEdgesIter : weightedGraph.costEdges) {
+		out << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.srcVertex << " " << costEdgesIter.second << "\n";
 	}
+	
 	out.close();
 }
 
@@ -74,7 +71,7 @@ int main() {
 		cout << "4. Determine the in/ out degree of a vertex\n";
 		cout << "5. Parse the set of inbound edges of a vertex\n";
 		cout << "6. Parse the set of outbound edges of a vertex\n";
-		cout << "7. Get the endpoints of an edge\n";
+		cout << "7. Get the endpoints of an edge\n"; // not used
 		cout << "8. Get the cost of an edge\n";
 		cout << "9. Modify the cost of an edge\n";
 		cout << "10. Add edge\n";
@@ -132,7 +129,7 @@ int main() {
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
 					for (auto iter = weightedGraph.inEdgesIterator(srcVertex); iter.isValid(); ++iter) {
-						cout << (*iter).index << " ";
+						cout << (*iter).index << " -> " << srcVertex << "\n";
 					}
 					cout << "\n";
 					break;
@@ -141,7 +138,7 @@ int main() {
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
 					for (auto iter = weightedGraph.outEdgesIterator(srcVertex); iter.isValid(); ++iter) {
-						cout << (*iter).index << " ";
+						cout << srcVertex << " -> " << (*iter).index << "\n";
 					}
 					cout << "\n";
 					break;
