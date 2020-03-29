@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
-#include "adjacentVertex.h"
 #include "vectorIterator.h"
 
 using namespace std;
-typedef vector <vector <AdjacentVertex>> AdjacentVertexList;
+typedef vector <vector <int>> AdjacentVertexList;
 
 class Graph {
 	private:

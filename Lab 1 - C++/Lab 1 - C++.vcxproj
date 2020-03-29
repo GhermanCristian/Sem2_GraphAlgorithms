@@ -24,7 +24,6 @@
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="vectorIterator.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="adjacentVertex.cpp" />
     <ClCompile Include="weightedGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,7 +31,6 @@
     <ClInclude Include="edge.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="vectorIterator.h" />
-    <ClInclude Include="adjacentVertex.h" />
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

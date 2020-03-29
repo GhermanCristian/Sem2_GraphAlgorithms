@@ -5,18 +5,24 @@ using namespace std;
 
 int Graph::getEdge(int srcVertex, int destVertex, AdjacentVertexList v) {
 	int position = 0;
+
+	if (!isActiveVertex(srcVertex) or !isActiveVertex(destVertex)) {
+		return -1;
+	}
+
 	for (VectorIterator iter(v[srcVertex]); iter.isValid(); ++iter, ++position) {
-		if ((*iter).index == destVertex) {
+		if ((*iter) == destVertex) {
 			return position;
 		}
 	}
+
 	return -1;
 }
 
-// deleted vertices will be marked with (-1, -1)
+// deleted vertices will be marked with -1
 // isolated vertices will be marked with an empty vector
 bool Graph::isActiveVertex(int vertex) {
-	return vertex < nrTotalVertices and !(inEdges[vertex].size() == 1 and inEdges[vertex][0] == AdjacentVertex(-1, -1));
+	return vertex < nrTotalVertices and !(inEdges[vertex].size() == 1 and inEdges[vertex][0] == -1);
 }
 
 Graph::Graph() {
@@ -27,7 +33,7 @@ Graph::Graph() {
 }
 
 void Graph::initEmptyGraph(int nrVertices){
-	vector <AdjacentVertex> emptyVector;
+	vector <int> emptyVector;
 	for (int i = 0; i < nrVertices; i++) {
 		inEdges.push_back(emptyVector);
 		outEdges.push_back(emptyVector);
@@ -71,24 +77,27 @@ void Graph::addEdge(int srcVertex, int destVertex) {
 		throw 1;
 	}
 
-	outEdges[srcVertex].push_back(AdjacentVertex(destVertex, 0));
-	inEdges[destVertex].push_back(AdjacentVertex(srcVertex, 0));
+	outEdges[srcVertex].push_back(destVertex);
+	inEdges[destVertex].push_back(srcVertex);
 	nrEdges++;
 }
 
 void Graph::removeEdge(int srcVertex, int destVertex) {
 	int inEdgePos = getEdge(destVertex, srcVertex, inEdges);
 	int outEdgePos = getEdge(srcVertex, destVertex, outEdges);
+
 	if (inEdgePos == -1 or outEdgePos == -1) {
 		throw 1;
 	}
+
 	outEdges[srcVertex].erase(outEdges[srcVertex].begin() + outEdgePos);
 	inEdges[destVertex].erase(inEdges[destVertex].begin() + inEdgePos);
 	nrEdges--;
 }
 
 void Graph::addVertex() {
-	vector <AdjacentVertex> emptyVector;
+	vector <int> emptyVector;
+
 	inEdges.push_back(emptyVector);
 	outEdges.push_back(emptyVector);
 	nrActiveVertices++;
@@ -100,21 +109,22 @@ void Graph::removeVertex(int vertex) {
 		throw 1;
 	}
 
-	vector <AdjacentVertex> temporary;
+	vector <int> temporary;
 
 	temporary = inEdges[vertex];
 	for (VectorIterator iter(temporary); iter.isValid(); ++iter) {
-		removeEdge((*iter).index, vertex);
+		removeEdge((*iter), vertex);
 	}
 	inEdges[vertex].clear();
-	inEdges[vertex].push_back(AdjacentVertex(-1, -1));
 
 	temporary = outEdges[vertex];
 	for (VectorIterator iter(temporary); iter.isValid(); ++iter) {
-		removeEdge(vertex, (*iter).index);
+		removeEdge(vertex, (*iter));
 	}
 	outEdges[vertex].clear();
-	outEdges[vertex].push_back(AdjacentVertex(-1, -1));
+
+	inEdges[vertex].push_back(-1);
+	outEdges[vertex].push_back(-1);
 
 	nrActiveVertices--;
 }

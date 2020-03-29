@@ -20,11 +20,11 @@ void WeightedGraph::modifyEdgeCost(int srcVertex, int destVertex, int newCost, b
 }
 
 void WeightedGraph::addEdge(int srcVertex, int destVertex, int cost, bool doChecks) {
-	if (doChecks == true and (isActiveVertex(srcVertex) == false or isActiveVertex(destVertex) == false or isEdge(srcVertex, destVertex))) {
+	if (doChecks == true and (isActiveVertex(srcVertex) == false or isActiveVertex(destVertex) == false or isEdge(srcVertex, destVertex) == true)) {
 		throw 1;
 	}
-	Graph::outEdges[srcVertex].push_back(AdjacentVertex(destVertex, cost));
-	Graph::inEdges[destVertex].push_back(AdjacentVertex(srcVertex, cost));
+	Graph::outEdges[srcVertex].push_back(destVertex);
+	Graph::inEdges[destVertex].push_back(srcVertex);
 	Edge newEdge(srcVertex, destVertex);
 	costEdges[newEdge] = cost;
 	nrEdges++;
@@ -37,13 +37,13 @@ void WeightedGraph::removeEdge(int srcVertex, int destVertex) {
 
 void WeightedGraph::printGraph() {
 	for (auto costEdgesIter : costEdges) {
-		cout << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.srcVertex << " " << costEdgesIter.second << "\n";
+		cout << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.destVertex << " " << costEdgesIter.second << "\n";
 	}
 }
 
 void WeightedGraph::removeVertex(int vertex) {
 	for (VectorIterator iter(outEdges[vertex]); iter.isValid(); ++iter) {
-		costEdges.erase(Edge(vertex, (*iter).index));
+		costEdges.erase(Edge(vertex, (*iter)));
 	}
 	Graph::removeVertex(vertex);
 }

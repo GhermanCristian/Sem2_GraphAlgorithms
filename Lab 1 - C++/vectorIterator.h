@@ -1,15 +1,15 @@
 #pragma once
 #include <vector>
-#include "adjacentVertex.h"
+
 using namespace std;
 
 class VectorIterator {
 	int currentPos;
-	vector <AdjacentVertex> iterable;
+	vector <int> iterable;
 
 	public:
-		VectorIterator(vector <AdjacentVertex> v);
+		VectorIterator(vector <int> v);
 		bool isValid();
 		void operator ++();
-		AdjacentVertex operator *();
+		int operator *();
 };

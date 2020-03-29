@@ -1,6 +1,6 @@
 #include "vectorIterator.h"
 
-VectorIterator::VectorIterator(vector <AdjacentVertex> iterable) {
+VectorIterator::VectorIterator(vector <int> iterable) {
 	currentPos = 0;
 	this->iterable = iterable;
 }
@@ -15,7 +15,7 @@ void VectorIterator::operator ++() {
 	}
 }
 
-AdjacentVertex VectorIterator::operator*() {
+int VectorIterator::operator*() {
 	if (!isValid()) {
 		throw 1;
 	}

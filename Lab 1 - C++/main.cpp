@@ -28,15 +28,21 @@ void loadGraph(WeightedGraph &weightedGraph) {
 // deleted nodes will be re-added to the file, and they will be isolated
 void saveGraph(WeightedGraph& weightedGraph) {
 	ofstream out("graph.txt");
+
 	out << weightedGraph.getTotalNrVertices() << " " << weightedGraph.getNrEdges() << "\n";
 	for (auto costEdgesIter : weightedGraph.costEdges) {
-		out << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.srcVertex << " " << costEdgesIter.second << "\n";
+		out << costEdgesIter.first.srcVertex << " " << costEdgesIter.first.destVertex << " " << costEdgesIter.second << "\n";
 	}
 	
 	out.close();
 }
 
 void generateRandomGraph(WeightedGraph& weightedGraph, int nrVertices, int nrEdges) {
+	if (nrVertices * nrVertices < nrEdges) {
+		cout << "Invalid number of vertices / edges\n";
+		throw 19;
+	}
+
 	int srcVertex, destVertex, cost;
 	weightedGraph.clearGraph();
 	
@@ -129,7 +135,7 @@ int main() {
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
 					for (auto iter = weightedGraph.inEdgesIterator(srcVertex); iter.isValid(); ++iter) {
-						cout << (*iter).index << " -> " << srcVertex << "\n";
+						cout << (*iter) << " -> " << srcVertex << "\n";
 					}
 					cout << "\n";
 					break;
@@ -138,7 +144,7 @@ int main() {
 					cout << "Insert vertex:\n";
 					cin >> srcVertex;
 					for (auto iter = weightedGraph.outEdgesIterator(srcVertex); iter.isValid(); ++iter) {
-						cout << srcVertex << " -> " << (*iter).index << "\n";
+						cout << srcVertex << " -> " << (*iter) << "\n";
 					}
 					cout << "\n";
 					break;

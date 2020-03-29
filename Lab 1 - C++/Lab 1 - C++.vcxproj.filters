@@ -33,9 +33,6 @@
     <ClCompile Include="vectorIterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="adjacentVertex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h">
@@ -51,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vectorIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="adjacentVertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
