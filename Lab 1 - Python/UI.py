@@ -14,9 +14,13 @@ class UI:
         except Exception as e:
             return str(e)
         
-        for i in range(nrIntegers):
-            numbers[i] = int(numbers[i])
-        return numbers
+        try:
+            for i in range(nrIntegers):
+                numbers[i] = int(numbers[i])
+            return numbers
+        except:
+            print ("Invalid input")
+            return
     
     def __printEdges(self, srcVertex, neighbourList, direction):
         for nbr in neighbourList:
@@ -82,7 +86,10 @@ class UI:
         noOfParameters = [0, 0, 0, 2, 1, 1, 1, 1, 0, 2, 3, 3, 2, 0, 1, 0, 0, 0, 0, 2]
         
         while True:
-            command = self.__readIntegers(1)[0]
+            parameters = self.__readIntegers(1)
+            if parameters == None:
+                continue
+            command = parameters[0]
             
             if command == 0:
                 print ("Program has ended")
@@ -91,6 +98,8 @@ class UI:
             try:
                 if noOfParameters[command]:
                     params = self.__readIntegers(noOfParameters[command])
+                    if params == None:
+                        continue
                 
                 if noOfParameters[command] == 0:
                     result = commandList[command]()
