@@ -24,16 +24,22 @@ class Graph {
 		std::unordered_map <int, int> distanceFromSource;
 
 		// SCC
-		int globalIndex;
+		int globalIndex; // also used in biComp
 		std::vector <int> inStack;
 		std::vector <int> validNodeStack;
-		std::vector <int> depth;
-		std::vector <int> lowLink;
+		std::vector <int> depth; // also used in biComp
+		std::vector <int> lowLink; // also used in biComp
 		std::vector < std::vector <int> > SCCList;
 		void pushToStack(int newVertexIndex);
 		void popFromStack();
 		void tarjanDFS(int srcVertex);
 		std::vector <int> newSCC(int SCCRoot);
+
+		// biconnected
+		std::vector < std::vector <int> > biCompList;
+		std::vector <Edge> edgeStack;
+		std::vector <int> newBiComp(int srcVertex, int neighbour);
+		void biCompDFS(int srcVertex);
 
 	public:
 		int numberOfEdges;
@@ -47,7 +53,7 @@ class Graph {
 		bool isEdge(int sourceVertex, int destVertex);
 		virtual bool addRandomEdge(int nrVertices);
 		void generateRandomGraph(int nrVertices, int nrEdges);
-		void loadGraphFromFile();
+		virtual void loadGraphFromFile();
 		void saveGraphToFile();
 
 		// BFS
@@ -59,4 +65,9 @@ class Graph {
 		void computeSCC();
 		int getSCCCount();
 		std::vector < std::vector <int> > getSCCList();
+
+		// biconnected
+		void computeBiComp();
+		int getBiCompCount();
+		std::vector < std::vector <int> > getBiCompList();
 };

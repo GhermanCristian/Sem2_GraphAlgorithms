@@ -16,7 +16,7 @@ class WeightedGraph : public Graph {
 		WeightedGraph(bool isOriented);
 		void addEdge(int sourceVertex, int destVertex, int edgeCost);
 		virtual bool addRandomEdge(int nrVertices);
-		void loadGraphFromFile();
+		virtual void loadGraphFromFile();
 		void saveGraphToFile();
 		
 		~WeightedGraph();

@@ -151,8 +151,10 @@
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="graph1k.txt" />
-    <Text Include="graph5_10.txt" />
+    <Text Include="graph1k_unw.txt" />
+    <Text Include="graph1k_unw_uno.txt" />
+    <Text Include="graph1k_w.txt" />
+    <Text Include="graph1k_w_uno.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

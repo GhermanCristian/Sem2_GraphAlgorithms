@@ -1,12 +1,13 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "weightedGraph.h"
 
 void BFS() {
-	WeightedGraph currentGraph;
+	WeightedGraph currentGraph(true);
 	int sourceVertex, destVertex;
-
 	currentGraph.loadGraphFromFile();
+
 	std::cout << "Insert sourceVertex destVertex:\n";
 	std::cin >> sourceVertex >> destVertex;
 
@@ -25,22 +26,35 @@ void BFS() {
 }
 
 void SCC() {
-	WeightedGraph currentGraph;
+	WeightedGraph currentGraph(true);
 	currentGraph.loadGraphFromFile();
-
 	currentGraph.computeSCC();
+
 	std::cout << "Number of SCCs = " << currentGraph.getSCCCount() << "\n";
 	std::vector < std::vector < int > > SCCList = currentGraph.getSCCList();
 	for (auto SCC : SCCList) {
 		for (auto vertex : SCC) {
 			std::cout << vertex << " ";
 		}
-		std::cout << "\n";
+		std::cout << "\n\n";
 	}
+	std::cout << "\n";
 }
 
 void biconnected() {
+	Graph currentGraph(false);
+	currentGraph.loadGraphFromFile();
+	currentGraph.computeBiComp();
 
+	std::cout << "Number of biComps = " << currentGraph.getBiCompCount() << "\n";
+	std::vector < std::vector <int> > biCompList = currentGraph.getBiCompList();
+	for (auto biComp : biCompList) {
+		for (auto vertex : biComp) {
+			std::cout << vertex << " ";
+		}
+		std::cout << "\n\n";
+	}
+	std::cout << "\n";
 }
 
 int main() {

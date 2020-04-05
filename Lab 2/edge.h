@@ -8,4 +8,5 @@ class Edge {
 
 		Edge(int srcVertex, int destVertex);
 		bool operator == (const Edge& newEdge) const;
+		bool operator != (const Edge& newEdge) const;
 };

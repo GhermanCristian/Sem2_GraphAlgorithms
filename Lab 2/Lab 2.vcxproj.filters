@@ -46,10 +46,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="graph5_10.txt">
+    <Text Include="graph1k_unw.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="graph1k.txt">
+    <Text Include="graph1k_unw_uno.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="graph1k_w.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="graph1k_w_uno.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <queue>
+#include <iostream>
 
 Graph::Graph() {
 	this->numberOfEdges = 0;
@@ -81,7 +82,7 @@ void Graph::generateRandomGraph(int nrVertices, int nrEdges) {
 }
 
 void Graph::loadGraphFromFile() {
-	int sourceVertex, destVertex, edgeCost;
+	int sourceVertex, destVertex;
 	std::string currentFile;
 
 	// we assume the input is valid
@@ -96,7 +97,7 @@ void Graph::loadGraphFromFile() {
 	in >> this->numberOfVertices >> this->numberOfEdges;
 	this->resetGraph();
 	for (int i = 0; i < this->numberOfEdges; i++) {
-		in >> sourceVertex >> destVertex >> edgeCost;
+		in >> sourceVertex >> destVertex;
 		this->addEdge(sourceVertex, destVertex);
 	}
 
@@ -261,3 +262,69 @@ int Graph::getSCCCount() {
 std::vector<std::vector<int>> Graph::getSCCList() {
 	return SCCList;
 }
+
+std::vector<int> Graph::newBiComp(int srcVertex, int neighbour){
+	std::vector <int> currentBiComp;
+	Edge currentEdge(srcVertex, neighbour);
+
+	while (currentEdge != edgeStack.back()) {
+		currentBiComp.push_back(edgeStack.back().destVertex);
+		edgeStack.pop_back();
+	}
+
+	edgeStack.pop_back(); // we also have to remove (srcVertex, neighbour) from the stack
+	currentBiComp.push_back(srcVertex);
+	currentBiComp.push_back(neighbour);
+
+	return currentBiComp;
+}
+
+void Graph::biCompDFS(int srcVertex){
+	lowLink[srcVertex] = depth[srcVertex] = ++globalIndex;
+
+	for (auto neighbour : outEdges[srcVertex]) {
+		if (depth[neighbour] == 0) {
+			edgeStack.push_back(Edge(srcVertex, neighbour));
+			biCompDFS(neighbour);
+
+			if (lowLink[neighbour] >= depth[srcVertex]) {
+				biCompList.push_back(newBiComp(srcVertex, neighbour));
+			}
+
+			lowLink[srcVertex] = min(lowLink[srcVertex], lowLink[neighbour]);
+		}
+
+		else {
+			lowLink[srcVertex] = min(lowLink[srcVertex], depth[neighbour]);
+		}
+		
+	}
+}
+
+void Graph::computeBiComp(){
+	depth.clear();
+	lowLink.clear();
+	edgeStack.clear();
+	biCompList.clear();
+	globalIndex = 0;
+
+	for (int vertex = 0; vertex < this->numberOfVertices; vertex++) {
+		depth.push_back(0);
+		lowLink.push_back(0);
+	}
+
+	for (int vertex = 0; vertex < this->numberOfVertices; vertex++) {
+		if (depth[vertex] == 0) {
+			biCompDFS(vertex);
+		}
+	}
+}
+
+int Graph::getBiCompCount(){
+	return biCompList.size();
+}
+
+std::vector<std::vector<int>> Graph::getBiCompList(){
+	return biCompList;
+}
+
