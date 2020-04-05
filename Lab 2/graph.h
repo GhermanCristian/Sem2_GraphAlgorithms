@@ -5,14 +5,17 @@
 #include "edge.h"
 #include "customHash.h"
 
-#define RANDOM_GRAPH_5_10 "graph5_10.txt"
-#define GRAPH_1K "graph1k.txt"
-#define CURRENT_GRAPH_FILE GRAPH_1K
+#define GRAPH_1K_UNWEIGHTED_ORIENTED "graph1k_unw.txt"
+#define GRAPH_1K_UNWEIGHTED_UNORIENTED "graph1k_unw_uno.txt"
+
+#define CURRENT_ORIENTED_GRAPH_FILE GRAPH_1K_UNWEIGHTED_ORIENTED
+#define CURRENT_UNORIENTED_GRAPH_FILE GRAPH_1K_UNWEIGHTED_UNORIENTED
 
 const int NON_EXISTENT = -111111;
 
 class Graph {
 	protected:
+		bool isOriented;
 		std::vector < std::vector  <int> > inEdges;
 		std::vector < std::vector  <int> > outEdges;
 
@@ -37,10 +40,12 @@ class Graph {
 		int numberOfVertices;
 
 		Graph();
+		Graph(bool isOriented);
 		void resetGraph();
 		void addVertex();
 		void addEdge(int sourceVertex, int destVertex);
 		bool isEdge(int sourceVertex, int destVertex);
+		virtual bool addRandomEdge(int nrVertices);
 		void generateRandomGraph(int nrVertices, int nrEdges);
 		void loadGraphFromFile();
 		void saveGraphToFile();

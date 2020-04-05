@@ -2,7 +2,7 @@
 #include <fstream>
 #include "weightedGraph.h"
 
-int main() {
+void BFS() {
 	WeightedGraph currentGraph;
 	int sourceVertex, destVertex;
 
@@ -22,6 +22,11 @@ int main() {
 	catch (std::exception& programException) {
 		std::cout << programException.what() << "\n\n";
 	}
+}
+
+void SCC() {
+	WeightedGraph currentGraph;
+	currentGraph.loadGraphFromFile();
 
 	currentGraph.computeSCC();
 	std::cout << "Number of SCCs = " << currentGraph.getSCCCount() << "\n";
@@ -31,6 +36,39 @@ int main() {
 			std::cout << vertex << " ";
 		}
 		std::cout << "\n";
+	}
+}
+
+void biconnected() {
+
+}
+
+int main() {
+	int command;
+
+	while (true) {
+		std::cout << "0. Exit\n";
+		std::cout << "1. BFS\n";
+		std::cout << "2. Strongly-connected comp\n";
+		std::cout << "3. Biconnected comp\n\n";
+		std::cin >> command;
+
+		if (command == 0) {
+			std::cout << "Program has ended";
+			break;
+		}
+
+		else if (command == 1) {
+			BFS();
+		}
+
+		else if (command == 2) {
+			SCC();
+		}
+
+		else if (command == 3) {
+			biconnected();
+		}
 	}
 
 	return 0;

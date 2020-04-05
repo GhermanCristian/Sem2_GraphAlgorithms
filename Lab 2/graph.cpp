@@ -2,9 +2,17 @@
 #include <queue>
 
 Graph::Graph() {
-	numberOfEdges = 0;
-	numberOfVertices = 0;
-	globalIndex = 0;
+	this->numberOfEdges = 0;
+	this->numberOfVertices = 0;
+	this->globalIndex = 0;
+	this->isOriented = true;
+}
+
+Graph::Graph(bool isOriented) {
+	this->numberOfEdges = 0;
+	this->numberOfVertices = 0;
+	this->globalIndex = 0;
+	this->isOriented = isOriented;
 }
 
 void Graph::resetGraph() {
@@ -25,6 +33,10 @@ void Graph::addVertex() {
 void Graph::addEdge(int sourceVertex, int destVertex){
 	inEdges[destVertex].push_back(sourceVertex);
 	outEdges[sourceVertex].push_back(destVertex);
+	if (this->isOriented == false) {
+		inEdges[sourceVertex].push_back(destVertex);
+		outEdges[destVertex].push_back(sourceVertex);
+	}
 }
 
 bool Graph::isEdge(int sourceVertex, int destVertex){
@@ -32,6 +44,22 @@ bool Graph::isEdge(int sourceVertex, int destVertex){
 		if (iter == sourceVertex) {
 			return true;
 		}
+	}
+
+	return false;
+}
+
+bool Graph::addRandomEdge(int nrVertices){
+	int srcVertex = rand() % nrVertices;
+	int destVertex = rand() % nrVertices;
+
+	if (srcVertex == destVertex and isOriented == false) {
+		return false;
+	}
+
+	if (this->isEdge(srcVertex, destVertex) == false) {
+		this->addEdge(srcVertex, destVertex);
+		return true;
 	}
 
 	return false;
@@ -46,25 +74,25 @@ void Graph::generateRandomGraph(int nrVertices, int nrEdges) {
 	this->numberOfEdges = nrEdges;
 	this->resetGraph();
 
-	int srcVertex, destVertex, edgeCost;
 	int nrExistingEdges = 0;
-
 	while (nrExistingEdges < nrEdges) {
-		srcVertex = rand() % nrVertices;
-		destVertex = rand() % nrVertices;
-		if (this->isEdge(srcVertex, destVertex) == false) {
-			edgeCost = rand() % (2 * nrVertices);
-			this->addEdge(srcVertex, destVertex);
-			nrExistingEdges++;
-		}
+		nrExistingEdges += addRandomEdge(nrVertices);
 	}
 }
 
 void Graph::loadGraphFromFile() {
 	int sourceVertex, destVertex, edgeCost;
+	std::string currentFile;
 
 	// we assume the input is valid
-	std::ifstream in(CURRENT_GRAPH_FILE);
+	if (this->isOriented) {
+		currentFile = CURRENT_ORIENTED_GRAPH_FILE;
+	}
+	else {
+		currentFile = CURRENT_UNORIENTED_GRAPH_FILE;
+	}
+	
+	std::ifstream in(currentFile);
 	in >> this->numberOfVertices >> this->numberOfEdges;
 	this->resetGraph();
 	for (int i = 0; i < this->numberOfEdges; i++) {
@@ -76,7 +104,17 @@ void Graph::loadGraphFromFile() {
 }
 
 void Graph::saveGraphToFile() {
-	std::ofstream out(CURRENT_GRAPH_FILE);
+	std::string currentFile;
+
+	// we assume the input is valid
+	if (this->isOriented) {
+		currentFile = CURRENT_ORIENTED_GRAPH_FILE;
+	}
+	else {
+		currentFile = CURRENT_UNORIENTED_GRAPH_FILE;
+	}
+
+	std::ofstream out(currentFile);
 	out << this->numberOfVertices << " " << this->numberOfEdges << "\n";
 	for (int srcVertex = 0; srcVertex < this->numberOfVertices; srcVertex++) {
 		for (auto destVertex : outEdges[srcVertex]) {

@@ -4,39 +4,48 @@ WeightedGraph::WeightedGraph() : Graph(){
 	;
 }
 
+WeightedGraph::WeightedGraph(bool isOriented) : Graph(isOriented) {
+	//this->isOriented = isOriented;
+}
+
 void WeightedGraph::addEdge(int sourceVertex, int destVertex, int edgeCost){
 	Graph::addEdge(sourceVertex, destVertex);
 	costEdges[Edge(sourceVertex, destVertex)] = edgeCost;
+	if (this->isOriented == false) {
+		costEdges[Edge(destVertex, sourceVertex)] = edgeCost;
+	}
 }
 
-void WeightedGraph::generateRandomGraph(int nrVertices, int nrEdges) {
-	if (nrVertices * nrVertices < nrEdges) {
-		return;
+bool WeightedGraph::addRandomEdge(int nrVertices) {
+	int srcVertex = rand() % nrVertices;
+	int destVertex = rand() % nrVertices;
+
+	if (srcVertex == destVertex and isOriented == false) {
+		return false;
 	}
 
-	this->numberOfVertices = nrVertices;
-	this->numberOfEdges = nrEdges;
-	this->resetGraph();
-
-	int srcVertex, destVertex, edgeCost;
-	int nrExistingEdges = 0;
-
-	while (nrExistingEdges < nrEdges) {
-		srcVertex = rand() % nrVertices;
-		destVertex = rand() % nrVertices;
-		if (this->isEdge(srcVertex, destVertex) == false) {
-			edgeCost = rand() % (2 * nrVertices);
-			this->addEdge(srcVertex, destVertex, edgeCost);
-			nrExistingEdges++;
-		}
+	if (this->isEdge(srcVertex, destVertex) == false) {
+		int edgeCost = rand() % nrVertices;
+		this->addEdge(srcVertex, destVertex, edgeCost);
+		return true;
 	}
+
+	return false;
 }
 
 void WeightedGraph::loadGraphFromFile() {
 	int sourceVertex, destVertex, edgeCost;
+	std::string currentFile;
 
 	// we assume the input is valid
-	ifstream in(CURRENT_GRAPH_FILE);
+	if (this->isOriented) {
+		currentFile = CURRENT_WEIGHTED_ORIENTED_GRAPH_FILE;
+	}
+	else {
+		currentFile = CURRENT_WEIGHTED_UNORIENTED_GRAPH_FILE;
+	}
+
+	std::ifstream in(currentFile);
 	in >> this->numberOfVertices >> this->numberOfEdges;
 	this->resetGraph();
 	for (int i = 0; i < this->numberOfEdges; i++) {
@@ -48,7 +57,17 @@ void WeightedGraph::loadGraphFromFile() {
 }
 
 void WeightedGraph::saveGraphToFile() {
-	ofstream out(CURRENT_GRAPH_FILE);
+	std::string currentFile;
+
+	// we assume the input is valid
+	if (this->isOriented) {
+		currentFile = CURRENT_WEIGHTED_ORIENTED_GRAPH_FILE;
+	}
+	else {
+		currentFile = CURRENT_WEIGHTED_UNORIENTED_GRAPH_FILE;
+	}
+
+	std::ofstream out(currentFile);
 	out << this->numberOfVertices << " " << this->numberOfEdges << "\n";
 	for (int srcVertex = 0; srcVertex < this->numberOfVertices; srcVertex++) {
 		for (auto destVertex : outEdges[srcVertex]) {
