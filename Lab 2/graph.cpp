@@ -92,7 +92,8 @@ void Graph::loadGraphFromFile() {
 	else {
 		currentFile = CURRENT_UNORIENTED_GRAPH_FILE;
 	}
-	
+	std::cout << "current file: " << currentFile << "\n";
+
 	std::ifstream in(currentFile);
 	in >> this->numberOfVertices >> this->numberOfEdges;
 	this->resetGraph();
@@ -297,7 +298,7 @@ void Graph::biCompDFS(int srcVertex){
 		else {
 			lowLink[srcVertex] = min(lowLink[srcVertex], depth[neighbour]);
 		}
-		
+
 	}
 }
 

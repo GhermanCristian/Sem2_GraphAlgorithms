@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <algorithm>
 #include "weightedGraph.h"
 
 void BFS() {
-	WeightedGraph currentGraph(true);
+	WeightedGraph currentGraph(true); // weighted + oriented graph
 	int sourceVertex, destVertex;
 	currentGraph.loadGraphFromFile();
 
@@ -26,7 +25,7 @@ void BFS() {
 }
 
 void SCC() {
-	WeightedGraph currentGraph(true);
+	WeightedGraph currentGraph(true); // unweighted + oriented graph
 	currentGraph.loadGraphFromFile();
 	currentGraph.computeSCC();
 
@@ -42,8 +41,10 @@ void SCC() {
 }
 
 void biconnected() {
-	Graph currentGraph(false);
-	currentGraph.loadGraphFromFile();
+	Graph currentGraph(false); // unweighted + unoriented
+	//currentGraph.loadGraphFromFile();
+	currentGraph.generateRandomGraph(1000, 4000);
+	currentGraph.saveGraphToFile();
 	currentGraph.computeBiComp();
 
 	std::cout << "Number of biComps = " << currentGraph.getBiCompCount() << "\n";

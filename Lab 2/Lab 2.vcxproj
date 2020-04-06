@@ -151,6 +151,9 @@
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="graph30k_unw.txt" />
+    <Text Include="graph100k_w.txt" />
+    <Text Include="graph10k_w.txt" />
     <Text Include="graph1k_unw.txt" />
     <Text Include="graph1k_unw_uno.txt" />
     <Text Include="graph1k_w.txt" />

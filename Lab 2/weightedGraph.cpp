@@ -1,11 +1,12 @@
 #include "weightedGraph.h"
+#include <iostream>
 
 WeightedGraph::WeightedGraph() : Graph(){
 	;
 }
 
 WeightedGraph::WeightedGraph(bool isOriented) : Graph(isOriented) {
-	//this->isOriented = isOriented;
+	;
 }
 
 void WeightedGraph::addEdge(int sourceVertex, int destVertex, int edgeCost){
@@ -44,6 +45,7 @@ void WeightedGraph::loadGraphFromFile() {
 	else {
 		currentFile = CURRENT_WEIGHTED_UNORIENTED_GRAPH_FILE;
 	}
+	std::cout << "current file: " << currentFile << "\n";
 
 	std::ifstream in(currentFile);
 	in >> this->numberOfVertices >> this->numberOfEdges;
