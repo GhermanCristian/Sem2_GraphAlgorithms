@@ -57,7 +57,8 @@ class Graph {
 			Input:
 				- The vertex we start from
 			Output:
-				- 
+				- The depth and lowLink lists are updated
+				- Any strongly-connected components that are encountered are stored in a list 
 		*/
 
 		std::vector <int> newSCC(int SCCRoot);
@@ -74,7 +75,23 @@ class Graph {
 		std::vector < std::vector <int> > biCompList;
 		std::vector <Edge> edgeStack;
 		std::vector <int> newBiComp(int srcVertex, int neighbour);
+		/*
+			Determines the biconnected component which starts from a given edge
+			Input:
+				- The vertices which form the edge we start from
+			Output:
+				- Returns a list of vertices which are part of the current SCC
+		*/
+
 		void biCompDFS(int srcVertex);
+		/*
+			Performs a DFS starting in a given vertex
+			Input:
+				- The vertex we start from
+			Output:
+				- The depth and lowLink lists are updated
+				- Any biconnected components that are encountered are stored in a list
+		*/
 
 	public:
 		int numberOfEdges;
