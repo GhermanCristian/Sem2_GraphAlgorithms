@@ -42,9 +42,7 @@ void SCC() {
 
 void biconnected() {
 	Graph currentGraph(false); // unweighted + unoriented
-	//currentGraph.loadGraphFromFile();
-	currentGraph.generateRandomGraph(1000, 4000);
-	currentGraph.saveGraphToFile();
+	currentGraph.loadGraphFromFile();
 	currentGraph.computeBiComp();
 
 	std::cout << "Number of biComps = " << currentGraph.getBiCompCount() << "\n";

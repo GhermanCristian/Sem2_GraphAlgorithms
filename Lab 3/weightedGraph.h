@@ -14,13 +14,13 @@ class WeightedGraph{
 		Matrix aux; // used in multiplications
 
 		void initialiseEmptyGraph();
-		void multiplyMatrices(Matrix& first, Matrix& second);
+		bool multiplyMatrices(Matrix& first, Matrix& second);
 		void displayMatrix(const Matrix& currentMatrix);
 
 	public:
 		WeightedGraph(std::string filePath);
 		void addEdge(int sourceVertex, int destVertex, int costEdge);
-		void computeAPSP();
+		bool computeAPSP();
 		int getMinimumDistance(int sourceVertex, int destVertex);
 };
 

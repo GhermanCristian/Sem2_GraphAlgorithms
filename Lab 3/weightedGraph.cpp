@@ -15,14 +15,23 @@ void WeightedGraph::initialiseEmptyGraph(){
 	}
 }
 
-void WeightedGraph::multiplyMatrices(Matrix& first, Matrix& second){
+bool WeightedGraph::multiplyMatrices(Matrix& first, Matrix& second){
+	int previousValue;
+	bool updated = false;
+
 	for (int row = 0; row < this->numberVertices; row++) {
 		for (int column = 0; column < this->numberVertices; column++) {
+			previousValue = aux[row][column];
 			aux[row][column] = NONEXISTENT_EDGE;
+
 			for (int pos = 0; pos < this->numberVertices; pos++) {
 				if (first[row][pos] != NONEXISTENT_EDGE and second[pos][column] != NONEXISTENT_EDGE and aux[row][column] > first[row][pos] + second[pos][column]) {
 					aux[row][column] = first[row][pos] + second[pos][column];
 				}
+			}
+
+			if (previousValue > aux[row][column]) {
+				updated = true;
 			}
 		}
 	}
@@ -32,6 +41,8 @@ void WeightedGraph::multiplyMatrices(Matrix& first, Matrix& second){
 			first[row][column] = aux[row][column];
 		}
 	}
+
+	return updated;
 }
 
 void WeightedGraph::displayMatrix(const Matrix& currentMatrix){
@@ -72,7 +83,9 @@ void WeightedGraph::addEdge(int sourceVertex, int destVertex, int costEdge){
 	this->weights[sourceVertex][destVertex] = costEdge;
 }
 
-void WeightedGraph::computeAPSP(){
+bool WeightedGraph::computeAPSP(){
+	bool isUpdated;
+
 	for (int row = 0; row < this->numberVertices; row++) {
 		for (int column = 0; column < this->numberVertices; column++) {
 			this->minimumDistance[row][column] = this->weights[row][column];
@@ -85,12 +98,19 @@ void WeightedGraph::computeAPSP(){
 	std::cout << "\n";
 
 	for (int pathLength = 2; pathLength < this->numberVertices; pathLength++) {
-		this->multiplyMatrices(minimumDistance, weights);
-
 		std::cout << "Path of length <= " << pathLength << "\n";
+		this->multiplyMatrices(minimumDistance, weights);
 		this->displayMatrix(minimumDistance);
 		std::cout << "\n";
 	}
+
+	// it has made an update at step n + 1
+	if (this->multiplyMatrices(minimumDistance, weights) == true) {
+		std::cout << "Deteced a negative cost cycle\n";
+		return true;
+	}
+
+	return false;
 }
 
 int WeightedGraph::getMinimumDistance(int sourceVertex, int destVertex){
