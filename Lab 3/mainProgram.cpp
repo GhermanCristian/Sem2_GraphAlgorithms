@@ -5,6 +5,7 @@ int main() {
 	int sourceVertex;
 	int destVertex;
 	WeightedGraph currentGraph("graph5.txt");
+
 	if (currentGraph.computeAPSP() == true) {
 		std::cout << "Cannot determine the min dist between 2 vertices\n";
 	}
