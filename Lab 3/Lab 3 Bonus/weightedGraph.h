@@ -6,8 +6,6 @@ class WeightedGraph : public Graph {
 		std::unordered_map <Edge, int, CustomHashFunction> costEdges;
 		
 		// Dijkstra
-		std::vector <int> minDistance;
-		std::vector <int> minWalksCount;
 		std::vector <int> minHeap;
 		std::vector <int> heapPosition;
 
@@ -22,7 +20,5 @@ class WeightedGraph : public Graph {
 		void addEdge(int sourceVertex, int destVertex, int edgeCost);
 		void loadGraphFromFile(const std::string& filePath);
 		void dijkstraMinWalksCount(int srcVertex);
-		int getMinDistance(int destVertex);
-		int getMinWalksCount(int destVertex);
 		~WeightedGraph();
 };

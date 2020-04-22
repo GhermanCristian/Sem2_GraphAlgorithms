@@ -53,12 +53,12 @@ int WeightedGraph::extractHeapTop(int& heapLength){
 
 void WeightedGraph::initialise(){
 	this->minDistance.clear();
-	this->minWalksCount.clear();
+	this->walkCount.clear();
 	this->minHeap.clear();
 	this->heapPosition.clear();
 	for (int i = 0; i < this->numberOfVertices; i++) {
 		this->minDistance.push_back(NON_EXISTENT);
-		this->minWalksCount.push_back(0);
+		this->walkCount.push_back(0);
 		this->minHeap.push_back(0);
 		this->heapPosition.push_back(-1);
 	}
@@ -96,7 +96,7 @@ void WeightedGraph::dijkstraMinWalksCount(int srcVertex){
 
 	initialise();
 	this->minDistance[srcVertex] = 0;
-	this->minWalksCount[srcVertex] = 1;
+	this->walkCount[srcVertex] = 1;
 	insertInHeap(srcVertex, heapLength);
 
 	while (heapLength > 0) {
@@ -107,7 +107,7 @@ void WeightedGraph::dijkstraMinWalksCount(int srcVertex){
 
 			if (minDistance[vertex] > minDistance[top] + cost) {
 				minDistance[vertex] = minDistance[top] + cost;
-				minWalksCount[vertex] = minWalksCount[top];
+				walkCount[vertex] = walkCount[top];
 
 				if (heapPosition[vertex] != -1) {
 					upHeap(heapPosition[vertex]);
@@ -118,24 +118,10 @@ void WeightedGraph::dijkstraMinWalksCount(int srcVertex){
 			}
 
 			else if (minDistance[vertex] == minDistance[top] + cost) {
-				minWalksCount[vertex] += minWalksCount[top];
+				walkCount[vertex] += walkCount[top];
 			}
 		}
 	}
-}
-
-int WeightedGraph::getMinDistance(int destVertex){
-	if (destVertex < 0 or destVertex >= this->numberOfVertices) {
-		throw std::exception("Invalid vertex");
-	}
-	return minDistance[destVertex];
-}
-
-int WeightedGraph::getMinWalksCount(int destVertex){
-	if (destVertex < 0 or destVertex >= this->numberOfVertices) {
-		throw std::exception("Invalid vertex");
-	}
-	return minWalksCount[destVertex];
 }
 
 WeightedGraph::~WeightedGraph(){

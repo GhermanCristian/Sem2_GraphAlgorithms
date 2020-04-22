@@ -1,7 +1,7 @@
 #include <iostream>
 #include "weightedGraph.h"
 
-void minWalksCount() {
+void walkCount() {
 	int srcVertex, destVertex;
 	WeightedGraph currentGraph;
 	currentGraph.loadGraphFromFile("graph5.txt");
@@ -16,7 +16,30 @@ void minWalksCount() {
 	try {
 		currentGraph.dijkstraMinWalksCount(srcVertex);
 		std::cout << "min dist: " << currentGraph.getMinDistance(destVertex) << "\n";
-		std::cout << "nr of distinct walks: " << currentGraph.getMinWalksCount(destVertex) << "\n";
+		std::cout << "nr of distinct walks: " << currentGraph.getWalksCount(destVertex) << "\n";
+	}
+	catch (std::exception& currentException) {
+		std::cout << currentException.what() << "\n";
+	}
+
+	std::cout << "\n";
+}
+
+void distinctWalksDAG() {
+	int srcVertex, destVertex;
+	Graph currentGraph;
+	currentGraph.loadGraphFromFile("graph10_unw.txt");
+
+	std::cout << "Insert source and destination vertex: ";
+	std::cin >> srcVertex >> destVertex;
+
+	if (srcVertex == -1) {
+		return;
+	}
+
+	try {
+		currentGraph.determineMinDistanceAndWalks(srcVertex);
+		std::cout << "nr of distinct walks: " << currentGraph.getWalksCount(destVertex) << "\n";
 	}
 	catch (std::exception& currentException) {
 		std::cout << currentException.what() << "\n";
@@ -41,11 +64,11 @@ int main() {
 		}
 
 		if (command == 1) {
-			minWalksCount();
+			walkCount();
 		}
 
 		else if (command == 2) {
-			;
+			distinctWalksDAG();
 		}
 	}
 	

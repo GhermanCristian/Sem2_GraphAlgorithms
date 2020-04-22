@@ -151,6 +151,7 @@
     <ClCompile Include="weightedGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="graph10_unw.txt" />
     <Text Include="graph5.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
