@@ -4,14 +4,10 @@
 void walkCount() {
 	int srcVertex, destVertex;
 	WeightedGraph currentGraph;
-	currentGraph.loadGraphFromFile("graph5.txt");
+	currentGraph.loadGraphFromFile("graph1k.txt");
 
 	std::cout << "Insert source and destination vertex: ";
 	std::cin >> srcVertex >> destVertex;
-
-	if (srcVertex == -1) {
-		return;
-	}
 
 	try {
 		currentGraph.dijkstraMinWalkCount(srcVertex);
@@ -28,14 +24,10 @@ void walkCount() {
 void distinctWalksDAG() {
 	int srcVertex, destVertex;
 	Graph currentGraph;
-	currentGraph.loadGraphFromFile("graph10_unw.txt");
+	currentGraph.loadGraphFromFile("graph1k_unw.txt");
 
 	std::cout << "Insert source and destination vertex: ";
 	std::cin >> srcVertex >> destVertex;
-
-	if (srcVertex == -1) {
-		return;
-	}
 
 	try {
 		currentGraph.determineWalks(srcVertex);

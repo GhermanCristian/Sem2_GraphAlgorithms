@@ -20,6 +20,12 @@ int main() {
 
 			try {
 				std::cout << currentGraph.getMinimumDistance(sourceVertex, destVertex) << "\n";
+				std::vector <int> minWalk = currentGraph.getMinimumWalk(sourceVertex, destVertex);
+				std::cout << sourceVertex << " ";
+				for (auto vertex : minWalk) {
+					std::cout << vertex << " ";
+				}
+				std::cout << destVertex << "\n";
 			}
 			catch (const std::exception& currentException) {
 				std::cout << currentException.what() << "\n";

@@ -1,6 +1,18 @@
 #include "weightedGraph.h"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
+
+void WeightedGraph::resetAuxMatrix(){
+	std::vector <int> emptyRow;
+	this->aux.clear();
+	for (int i = 0; i < this->numberVertices; i++) {
+		emptyRow.push_back(NONEXISTENT_EDGE);
+	}
+	for (int i = 0; i < this->numberVertices; i++) {
+		this->aux.push_back(emptyRow);
+	}	
+}
 
 void WeightedGraph::initialiseEmptyGraph(){
 	std::vector <int> emptyRow;
@@ -11,6 +23,7 @@ void WeightedGraph::initialiseEmptyGraph(){
 		this->weights.push_back(emptyRow);
 		this->minimumDistance.push_back(emptyRow);
 		this->aux.push_back(emptyRow);
+		this->intermediateVertex.push_back(emptyRow);
 		this->weights[i][i] = 0;
 	}
 }
@@ -21,17 +34,20 @@ bool WeightedGraph::multiplyMatrices(Matrix& first, Matrix& second){
 
 	for (int row = 0; row < this->numberVertices; row++) {
 		for (int column = 0; column < this->numberVertices; column++) {
-			previousValue = aux[row][column];
+			int lastPos = -1;
+			previousValue = first[row][column];
 			aux[row][column] = NONEXISTENT_EDGE;
 
 			for (int pos = 0; pos < this->numberVertices; pos++) {
 				if (first[row][pos] != NONEXISTENT_EDGE and second[pos][column] != NONEXISTENT_EDGE and aux[row][column] > first[row][pos] + second[pos][column]) {
 					aux[row][column] = first[row][pos] + second[pos][column];
+					lastPos = pos;
 				}
 			}
 
 			if (previousValue > aux[row][column]) {
 				updated = true;
+				intermediateVertex[row][column] = lastPos;
 			}
 		}
 	}
@@ -89,16 +105,23 @@ bool WeightedGraph::computeAPSP(){
 	for (int row = 0; row < this->numberVertices; row++) {
 		for (int column = 0; column < this->numberVertices; column++) {
 			this->minimumDistance[row][column] = this->weights[row][column];
+			if (this->weights[row][column] != NONEXISTENT_EDGE) {
+				this->intermediateVertex[row][column] = -1;
+			}
+			else {
+				this->intermediateVertex[row][column] = -2;
+			}
 			this->aux[row][column] = 0;
 		}
 	}
 
-	std::cout << "Path of length <= 1\n";
+	std::cout << "D ^ 1 = D ^ 0 x W\n";
 	this->displayMatrix(minimumDistance);
 	std::cout << "\n";
 
 	for (int pathLength = 2; pathLength < this->numberVertices; pathLength++) {
-		std::cout << "Path of length <= " << pathLength << "\n";
+		std::cout << "D ^ " << pathLength << " = " << "D ^ " << pathLength - 1 << " x W\n";
+		this->resetAuxMatrix();
 		this->multiplyMatrices(minimumDistance, weights);
 		this->displayMatrix(minimumDistance);
 		std::cout << "\n";
@@ -119,4 +142,19 @@ int WeightedGraph::getMinimumDistance(int sourceVertex, int destVertex){
 	}
 
 	return this->minimumDistance[sourceVertex][destVertex];
+}
+
+std::vector<int> WeightedGraph::getMinimumWalk(int sourceVertex, int destVertex){
+	if (sourceVertex < 0 or destVertex < 0 or sourceVertex >= this->numberVertices or destVertex >= this->numberVertices) {
+		throw std::exception("Invalid vertices");
+	}
+	
+	std::vector <int> minWalk;
+	while (intermediateVertex[sourceVertex][destVertex] != -1) {
+		minWalk.push_back(intermediateVertex[sourceVertex][destVertex]);
+		destVertex = intermediateVertex[sourceVertex][destVertex];
+	}
+	std::reverse(minWalk.begin(), minWalk.end());
+
+	return minWalk;
 }

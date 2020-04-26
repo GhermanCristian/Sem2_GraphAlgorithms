@@ -12,6 +12,12 @@ class WeightedGraph{
 		Matrix weights; // [i][j] = weight of the edge from i to j
 		Matrix minimumDistance; // [i][j] = minimum distance from i to j
 		Matrix aux; // used in multiplications
+		Matrix intermediateVertex;
+
+		void resetAuxMatrix();
+		/*
+			Resets the aux matrix
+		*/
 
 		void initialiseEmptyGraph();
 		/*
@@ -78,6 +84,16 @@ class WeightedGraph{
 				- The two vertices
 			Output:
 				- Returns the minimum distance
+				- Throws an exception if any of the vertices doesn't exist
+		*/
+
+		std::vector < int > getMinimumWalk(int sourceVertex, int destVertex);
+		/*
+			Determines the minimum walk between 2 given vertices
+			Input:
+				- The two vertices
+			Output:
+				- Returns the minimum walk
 				- Throws an exception if any of the vertices doesn't exist
 		*/
 };

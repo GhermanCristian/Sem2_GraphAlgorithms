@@ -55,5 +55,8 @@
     <Text Include="graph1k_unw.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="graph1k.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

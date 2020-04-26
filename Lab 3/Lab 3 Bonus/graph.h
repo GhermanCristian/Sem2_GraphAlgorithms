@@ -97,9 +97,9 @@ class Graph {
 			Determines the number of walks from sourceVertex to all the other vertices
 			Input:
 				- The source vertex
-				- The topologicalOrder vector, which is filled
 			Output:
 				- The walkCount vector is filled
+				- The topologicalOrder vector is filled
 		*/
 
 		int getWalkCount(int destVertex);

@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="graph10_unw.txt" />
+    <Text Include="graph1k.txt" />
     <Text Include="graph1k_unw.txt" />
     <Text Include="graph5.txt" />
   </ItemGroup>
