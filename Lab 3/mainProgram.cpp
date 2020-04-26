@@ -18,7 +18,12 @@ int main() {
 				break;
 			}
 
-			std::cout << currentGraph.getMinimumDistance(sourceVertex, destVertex) << "\n";
+			try {
+				std::cout << currentGraph.getMinimumDistance(sourceVertex, destVertex) << "\n";
+			}
+			catch (const std::exception& currentException) {
+				std::cout << currentException.what() << "\n";
+			}
 		}
 	}
 	

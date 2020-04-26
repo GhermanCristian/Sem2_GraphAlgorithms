@@ -87,7 +87,7 @@ void WeightedGraph::loadGraphFromFile(const std::string& filePath) {
 	in.close();
 }
 
-void WeightedGraph::dijkstraMinWalksCount(int srcVertex){
+void WeightedGraph::dijkstraMinWalkCount(int srcVertex){
 	if (srcVertex < 0 or srcVertex >= this->numberOfVertices) {
 		throw std::exception("Invalid vertex");
 	}
@@ -122,6 +122,13 @@ void WeightedGraph::dijkstraMinWalksCount(int srcVertex){
 			}
 		}
 	}
+}
+
+int WeightedGraph::getMinDistance(int destVertex) {
+	if (destVertex < 0 or destVertex >= this->numberOfVertices) {
+		throw std::exception("Invalid vertex");
+	}
+	return minDistance[destVertex];
 }
 
 WeightedGraph::~WeightedGraph(){

@@ -142,8 +142,6 @@
     <ClCompile Include="weightedGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <ItemGroup>

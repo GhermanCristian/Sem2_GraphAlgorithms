@@ -82,7 +82,7 @@ void Graph::loadGraphFromFile(const std::string& filePath){
 	in.close();
 }
 
-void Graph::determineMinDistanceAndWalks(int sourceVertex){
+void Graph::determineWalks(int sourceVertex){
 	topologicalSort();
 
 	this->walkCount.clear();
@@ -98,14 +98,7 @@ void Graph::determineMinDistanceAndWalks(int sourceVertex){
 	}
 }
 
-int Graph::getMinDistance(int destVertex) {
-	if (destVertex < 0 or destVertex >= this->numberOfVertices) {
-		throw std::exception("Invalid vertex");
-	}
-	return minDistance[destVertex];
-}
-
-int Graph::getWalksCount(int destVertex) {
+int Graph::getWalkCount(int destVertex) {
 	if (destVertex < 0 or destVertex >= this->numberOfVertices) {
 		throw std::exception("Invalid vertex");
 	}

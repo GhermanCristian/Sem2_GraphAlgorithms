@@ -14,9 +14,9 @@ void walkCount() {
 	}
 
 	try {
-		currentGraph.dijkstraMinWalksCount(srcVertex);
+		currentGraph.dijkstraMinWalkCount(srcVertex);
 		std::cout << "min dist: " << currentGraph.getMinDistance(destVertex) << "\n";
-		std::cout << "nr of distinct walks: " << currentGraph.getWalksCount(destVertex) << "\n";
+		std::cout << "nr of distinct walks: " << currentGraph.getWalkCount(destVertex) << "\n";
 	}
 	catch (std::exception& currentException) {
 		std::cout << currentException.what() << "\n";
@@ -38,8 +38,8 @@ void distinctWalksDAG() {
 	}
 
 	try {
-		currentGraph.determineMinDistanceAndWalks(srcVertex);
-		std::cout << "nr of distinct walks: " << currentGraph.getWalksCount(destVertex) << "\n";
+		currentGraph.determineWalks(srcVertex);
+		std::cout << "nr of distinct walks: " << currentGraph.getWalkCount(destVertex) << "\n";
 	}
 	catch (std::exception& currentException) {
 		std::cout << currentException.what() << "\n";

@@ -104,7 +104,7 @@ bool WeightedGraph::computeAPSP(){
 		std::cout << "\n";
 	}
 
-	// it has made an update at step n + 1
+	// it has made an update at step n + 1 => negative weight cycle
 	if (this->multiplyMatrices(minimumDistance, weights) == true) {
 		std::cout << "Deteced a negative cost cycle\n";
 		return true;
