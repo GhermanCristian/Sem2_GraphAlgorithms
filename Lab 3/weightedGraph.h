@@ -12,12 +12,7 @@ class WeightedGraph{
 		Matrix weights; // [i][j] = weight of the edge from i to j
 		Matrix minimumDistance; // [i][j] = minimum distance from i to j
 		Matrix aux; // used in multiplications
-		Matrix intermediateVertex;
-
-		void resetAuxMatrix();
-		/*
-			Resets the aux matrix
-		*/
+		Matrix intermediateVertex; // if the minimum road from (i, j) = min. road (i, x) + the edge (x,j) => the intermediate vertex is x
 
 		void initialiseEmptyGraph();
 		/*

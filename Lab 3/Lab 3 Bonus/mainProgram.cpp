@@ -4,7 +4,7 @@
 void walkCount() {
 	int srcVertex, destVertex;
 	WeightedGraph currentGraph;
-	currentGraph.loadGraphFromFile("graph1k.txt");
+	currentGraph.loadGraphFromFile("graph5.txt");
 
 	std::cout << "Insert source and destination vertex: ";
 	std::cin >> srcVertex >> destVertex;
@@ -24,7 +24,7 @@ void walkCount() {
 void distinctWalksDAG() {
 	int srcVertex, destVertex;
 	Graph currentGraph;
-	currentGraph.loadGraphFromFile("graph1k_unw.txt");
+	currentGraph.loadGraphFromFile("graph10_unw.txt");
 
 	std::cout << "Insert source and destination vertex: ";
 	std::cin >> srcVertex >> destVertex;

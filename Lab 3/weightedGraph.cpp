@@ -3,17 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-void WeightedGraph::resetAuxMatrix(){
-	std::vector <int> emptyRow;
-	this->aux.clear();
-	for (int i = 0; i < this->numberVertices; i++) {
-		emptyRow.push_back(NONEXISTENT_EDGE);
-	}
-	for (int i = 0; i < this->numberVertices; i++) {
-		this->aux.push_back(emptyRow);
-	}	
-}
-
 void WeightedGraph::initialiseEmptyGraph(){
 	std::vector <int> emptyRow;
 	for (int i = 0; i < this->numberVertices; i++) {
@@ -100,8 +89,6 @@ void WeightedGraph::addEdge(int sourceVertex, int destVertex, int costEdge){
 }
 
 bool WeightedGraph::computeAPSP(){
-	bool isUpdated;
-
 	for (int row = 0; row < this->numberVertices; row++) {
 		for (int column = 0; column < this->numberVertices; column++) {
 			this->minimumDistance[row][column] = this->weights[row][column];
@@ -111,7 +98,6 @@ bool WeightedGraph::computeAPSP(){
 			else {
 				this->intermediateVertex[row][column] = -2;
 			}
-			this->aux[row][column] = 0;
 		}
 	}
 
@@ -121,7 +107,6 @@ bool WeightedGraph::computeAPSP(){
 
 	for (int pathLength = 2; pathLength < this->numberVertices; pathLength++) {
 		std::cout << "D ^ " << pathLength << " = " << "D ^ " << pathLength - 1 << " x W\n";
-		this->resetAuxMatrix();
 		this->multiplyMatrices(minimumDistance, weights);
 		this->displayMatrix(minimumDistance);
 		std::cout << "\n";
@@ -141,6 +126,10 @@ int WeightedGraph::getMinimumDistance(int sourceVertex, int destVertex){
 		throw std::exception("Invalid vertices");
 	}
 
+	if (this->minimumDistance[sourceVertex][destVertex] == NONEXISTENT_EDGE) {
+		throw std::exception("No path between the two vertices");
+	}
+
 	return this->minimumDistance[sourceVertex][destVertex];
 }
 
@@ -150,7 +139,7 @@ std::vector<int> WeightedGraph::getMinimumWalk(int sourceVertex, int destVertex)
 	}
 	
 	std::vector <int> minWalk;
-	while (intermediateVertex[sourceVertex][destVertex] != -1) {
+	while (intermediateVertex[sourceVertex][destVertex] > 0) {
 		minWalk.push_back(intermediateVertex[sourceVertex][destVertex]);
 		destVertex = intermediateVertex[sourceVertex][destVertex];
 	}
