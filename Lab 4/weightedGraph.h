@@ -4,6 +4,8 @@
 #include "customHash.h"
 #include <unordered_map>
 
+const int VERY_LARGE_COST = 999999999;
+
 class WeightedGraph : public Graph {
 	private:
 		std::unordered_map <Edge, int, CustomHashFunction> costEdges;
@@ -19,5 +21,6 @@ class WeightedGraph : public Graph {
 		virtual void loadGraphFromFile(std::string filePath);
 		int getMSTCostKruskal();
 		const std::vector <Edge>& getMSTEdgesKruskal();
+		int countDistinctPathsLowestCost(int sourceVertex, int destVertex);
 		~WeightedGraph();
 };

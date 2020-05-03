@@ -55,5 +55,11 @@
     <Text Include="graph8_uno_w.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="graph8_o_unw.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="graph8_o_w.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -83,6 +83,51 @@ const std::vector<Edge>& WeightedGraph::getMSTEdgesKruskal(){
 	return this->minimumSpanningTreeEdges;
 }
 
+int WeightedGraph::countDistinctPathsLowestCost(int sourceVertex, int destVertex){
+	if (destVertex < 0 or destVertex >= this->numberOfVertices or sourceVertex < 0 or sourceVertex >= this->numberOfVertices) {
+		throw std::exception("Invalid vertex");
+	}
+
+	std::vector<int> distinctPaths;
+	std::vector<int> lowestCost;
+	int positionInSortedList = 0; // of the source vertex; it has a default value so that VS won't complain
+	int currentVertex;
+
+	for (int i = 0; i < this->numberOfVertices; i++) {
+		distinctPaths.push_back(0);
+		lowestCost.push_back(VERY_LARGE_COST);
+	}
+	distinctPaths[sourceVertex] = 1;
+	lowestCost[sourceVertex] = 0;
+	topologicalSort();
+
+	// find the position of the source vertex in the topologically sorted vector, so that we can start directly from
+	// there (otherwise, the number of paths to the source vertex will not remain 1, which will have a domino effect)
+	for (int i = 0; i < this->numberOfVertices; i++) {
+		if (topologicalOrder[i] == sourceVertex) {
+			positionInSortedList = i;
+			break;
+		}
+	}
+
+	for (int i = positionInSortedList; i < this->numberOfVertices; i++) {
+		currentVertex = topologicalOrder[i];
+		for (auto neighbour : outEdges[currentVertex]) {
+			int edgeCost = costEdges[Edge(currentVertex, neighbour)];
+
+			if (lowestCost[neighbour] > lowestCost[currentVertex] + edgeCost) {
+				lowestCost[neighbour] = lowestCost[currentVertex] + edgeCost;
+				distinctPaths[neighbour] = distinctPaths[currentVertex];
+			}
+			else if (lowestCost[neighbour] == lowestCost[currentVertex] + edgeCost) {
+				distinctPaths[neighbour] += distinctPaths[currentVertex];
+			}
+		}
+	}
+
+	return distinctPaths[destVertex];
+}
+
 WeightedGraph::~WeightedGraph(){
 	;
 }

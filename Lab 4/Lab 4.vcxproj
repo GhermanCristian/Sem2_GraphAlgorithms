@@ -153,6 +153,8 @@
     <ClInclude Include="weightedGraph.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="graph8_o_unw.txt" />
+    <Text Include="graph8_o_w.txt" />
     <Text Include="graph8_uno_w.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
