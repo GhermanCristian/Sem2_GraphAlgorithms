@@ -6,7 +6,7 @@ int main() {
 	int destVertex;
 	WeightedGraph currentGraph("graph5.txt");
 
-	if (currentGraph.computeAPSP() == true) {
+	if (currentGraph.computeAPSP() == true) { // negative weight cycle
 		std::cout << "Cannot determine the min dist between 2 vertices\n";
 	}
 	else {

@@ -61,8 +61,11 @@ bool Graph::DFSCheckForCycles(int sourceVertex) {
 			}
 			callResult = DFSCheckForCycles(neighbour);
 			if (callResult == true) {
-				return true; // we "propell" up the DFS tree the message that there are cycles
+				return true; // we "propel" up the DFS tree the message that there are cycles
 			}
+		}
+		else if (inCurrentStack[neighbour] == true) {
+			return true;
 		}
 	}
 
@@ -125,7 +128,7 @@ int Graph::countDistinctPaths(int sourceVertex, int destVertex){
 		throw std::exception("Invalid vertex");
 	}
 
-	std::vector<int> distinctPaths;
+	std::vector<int> distinctPaths; // number of paths from the source vertex to the vertex 'i'
 	int positionInSortedList = 0; // of the source vertex; it has a default value so that VS won't complain
 	int currentVertex;
 

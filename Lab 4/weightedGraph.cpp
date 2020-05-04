@@ -30,28 +30,6 @@ void WeightedGraph::loadGraphFromFile(std::string filePath) {
 	in.close();
 }
 
-bool WeightedGraph::edgeCostCompareFunction(const Edge& a, const Edge& b){
-	return costEdges[a] < costEdges[b];
-}
-
-int WeightedGraph::getEdgeCost(int a, int b)
-{
-	int edgeCost;
-	try {
-		edgeCost = this->costEdges[Edge(a, b)];
-		return edgeCost;
-	}
-	catch(...) {
-		try {
-			edgeCost = this->costEdges[Edge(b, a)];
-			return edgeCost;
-		}
-		catch (...) {
-			return 0;
-		}
-	}
-}
-
 int WeightedGraph::getMSTCostKruskal(){
 	DisjointSetForest currentDSF(this->numberOfVertices);
 	std::vector <Edge> edges;
@@ -88,8 +66,8 @@ int WeightedGraph::countDistinctPathsLowestCost(int sourceVertex, int destVertex
 		throw std::exception("Invalid vertex");
 	}
 
-	std::vector<int> distinctPaths;
-	std::vector<int> lowestCost;
+	std::vector<int> distinctPaths; // number of paths from the source vertex to the vertex 'i'
+	std::vector<int> lowestCost; // lowest cost of the path from the source vertex to the vertex 'i'
 	int positionInSortedList = 0; // of the source vertex; it has a default value so that VS won't complain
 	int currentVertex;
 

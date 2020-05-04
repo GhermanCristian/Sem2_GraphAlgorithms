@@ -51,7 +51,7 @@ void distinctPathsLowestCost() {
 		std::cin >> sourceVertex >> destVertex;
 		try {
 			distinctPathLowestCostCount = currentGraph.countDistinctPathsLowestCost(sourceVertex, destVertex);
-			std::cout << "Number of distinct paths: " << distinctPathLowestCostCount << "\n";
+			std::cout << "Number of distinct paths of min cost: " << distinctPathLowestCostCount << "\n";
 		}
 		catch (const std::exception& currentException) {
 			std::cout << currentException.what() << "\n";
