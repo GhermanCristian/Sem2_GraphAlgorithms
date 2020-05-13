@@ -6,8 +6,8 @@ const int NON_EXISTENT = -111111;
 class Graph {
 	protected:
 		bool isOriented;
-		std::vector < std::vector  <int> > inEdges;
-		std::vector < std::vector  <int> > outEdges;
+		std::vector < std::vector <int> > inEdges;
+		std::vector < std::vector <int> > outEdges;
 		std::vector<bool> inCurrentStack; 
 		std::vector<bool> visited;
 		std::vector<int> topologicalOrder; // will contain the vertices of the graph sorted in topological order
@@ -122,6 +122,13 @@ class Graph {
 				- The path of the file we load from
 			Output:
 				- The graph contains the edges and vertices from the file
+		*/
+
+		const std::vector<int>& getTopologicalOrder();
+		/*
+			Returns the vector which contains the nodes sorted in topological orde
+			Input:
+				- The function topologicalSort has to be called prior to this
 		*/
 
 };

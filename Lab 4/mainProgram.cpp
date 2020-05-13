@@ -29,6 +29,13 @@ void distinctPaths() {
 		try {
 			distinctPathCount = currentGraph.countDistinctPaths(sourceVertex, destVertex);
 			std::cout << "Number of distinct paths: " << distinctPathCount << "\n";
+
+			std::cout << "Topological order: ";
+			std::vector<int> topologicalOrder = currentGraph.getTopologicalOrder();
+			for (auto vertex : topologicalOrder) {
+				std::cout << vertex << " ";
+			}
+			std::cout << "\n";
 		}
 		catch (const std::exception& currentException) {
 			std::cout << currentException.what() << "\n";
@@ -52,6 +59,13 @@ void distinctPathsLowestCost() {
 		try {
 			distinctPathLowestCostCount = currentGraph.countDistinctPathsLowestCost(sourceVertex, destVertex);
 			std::cout << "Number of distinct paths of min cost: " << distinctPathLowestCostCount << "\n";
+
+			std::cout << "Topological order: ";
+			std::vector<int> topologicalOrder = currentGraph.getTopologicalOrder();
+			for (auto vertex : topologicalOrder) {
+				std::cout << vertex << " ";
+			}
+			std::cout << "\n";
 		}
 		catch (const std::exception& currentException) {
 			std::cout << currentException.what() << "\n";

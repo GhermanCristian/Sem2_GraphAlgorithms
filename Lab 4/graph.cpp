@@ -171,3 +171,7 @@ void Graph::loadGraphFromFile(std::string filePath) {
 	in.close();
 }
 
+const std::vector<int>& Graph::getTopologicalOrder(){
+	return this->topologicalOrder;
+}
+
