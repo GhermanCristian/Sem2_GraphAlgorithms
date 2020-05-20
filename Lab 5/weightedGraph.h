@@ -2,6 +2,7 @@
 #include "edge.h"
 #include "customHash.h"
 #include <unordered_map>
+#include <vector>
 
 const int VERY_LARGE_COST = 999999999;
 
@@ -9,6 +10,7 @@ class WeightedGraph{
 	private:
 		int numberOfEdges;
 		int numberOfVertices;
+		int hamPathCost;
 
 		std::unordered_map <Edge, int, CustomHashFunction> costEdges;
 		std::vector < std::vector <int> > inEdges;
@@ -59,6 +61,11 @@ class WeightedGraph{
 			Output:
 				- The graph contains the edges and vertices from the file
 		*/
+
+		std::vector<Edge> approximateTSPSortingEdges();
+		void approximateTSPTakingLowestEdge();
+
+		int getHamPathCost();
 
 		~WeightedGraph();
 		/*

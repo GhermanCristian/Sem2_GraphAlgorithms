@@ -139,14 +139,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="customHash.cpp" />
+    <ClCompile Include="disjointSetForest.cpp" />
     <ClCompile Include="edge.cpp" />
     <ClCompile Include="mainProgram.cpp" />
     <ClCompile Include="weightedGraph.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="customHash.h" />
+    <ClInclude Include="disjointSetForest.h" />
     <ClInclude Include="edge.h" />
     <ClInclude Include="weightedGraph.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="graph6.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

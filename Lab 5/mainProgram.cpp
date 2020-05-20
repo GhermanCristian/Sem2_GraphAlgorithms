@@ -5,6 +5,11 @@ void TSPApproximationSortedEdges() {
 	WeightedGraph currentGraph;
 	currentGraph.loadGraphFromFile("graph6.txt");
 
+	std::vector<Edge> hamPathEdges = currentGraph.approximateTSPSortingEdges();
+	std::cout<<"Hamiltonian path cost: "<< currentGraph.getHamPathCost() << "\n";
+	for (auto currentEdge : hamPathEdges) {
+		std::cout << currentEdge.srcVertex << " " << currentEdge.destVertex << "\n";
+	}
 }
 
 void TSPApproximationTakeLowestEdge() {
