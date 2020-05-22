@@ -16,6 +16,10 @@ class WeightedGraph{
 		std::vector < std::vector <int> > inEdges;
 		std::vector < std::vector <int> > outEdges;
 
+		std::vector<int> hamPathVertices; // used in the nearest neighbour method
+		std::vector<bool> visited;
+		int originalVertex;
+
 		void addVertex();
 		/*
 			Adds a new vertex to the graph (with the index being the largest so far)
@@ -33,6 +37,9 @@ class WeightedGraph{
 			Output:
 				- The edges of the graph are deleted
 		*/
+
+		int getEdgeCost(int a, int b);
+		bool recursiveTraversal(int sourceVertex, int cycleDepth);
 		
 	public:
 		WeightedGraph();
@@ -63,9 +70,10 @@ class WeightedGraph{
 		*/
 
 		std::vector<Edge> approximateTSPSortingEdges();
-		void approximateTSPTakingLowestEdge();
+		void approximateTSPNearestNeighbour();
 
 		int getHamPathCost();
+		const std::vector<int>& getHamPathVertices();
 
 		~WeightedGraph();
 		/*
