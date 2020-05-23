@@ -1,5 +1,4 @@
 #include "weightedGraph.h"
-#include "disjointSetForest.h"
 #include <iostream>
 #include <algorithm>
 #include <fstream>
@@ -7,6 +6,9 @@
 WeightedGraph::WeightedGraph(){
 	this->numberOfEdges = 0;
 	this->numberOfVertices = 0;
+	// these two are set so that the compiler doesn't complain
+	this->hamPathCost = 0;
+	this->originalVertex = 0;
 }
 
 void WeightedGraph::addVertex() {

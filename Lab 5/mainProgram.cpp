@@ -4,6 +4,8 @@
 void TSPApproximationSortedEdges() {
 	WeightedGraph currentGraph;
 	currentGraph.loadGraphFromFile("graph6.txt");
+	//currentGraph.loadGraphFromFile("graph6_11.txt");
+	//currentGraph.loadGraphFromFile("graph5_10.txt");
 	currentGraph.approximateTSPSortingEdges();
 
 	std::vector<Edge> hamPathEdges = currentGraph.getHamPathEdges();
@@ -13,15 +15,18 @@ void TSPApproximationSortedEdges() {
 		return;
 	}
 
-	std::cout<<"Hamiltonian path cost: "<< currentGraph.getHamPathCost() << "\n";
+	std::cout << "Hamiltonian path cost: "<< currentGraph.getHamPathCost() << "\n";
+	std::cout << "Edges:\n";
 	for (auto currentEdge : hamPathEdges) {
 		std::cout << currentEdge.srcVertex << " " << currentEdge.destVertex << "\n";
 	}
 }
 
-void TSPApproximationTakeLowestEdge() {
+void TSPApproximationNearestNeighbour() {
 	WeightedGraph currentGraph;
 	currentGraph.loadGraphFromFile("graph6.txt");
+	//currentGraph.loadGraphFromFile("graph6_11.txt");
+	//currentGraph.loadGraphFromFile("graph5_10.txt");
 	currentGraph.approximateTSPNearestNeighbour();
 
 	std::vector<int> hamPathVertices = currentGraph.getHamPathVertices();
@@ -32,7 +37,8 @@ void TSPApproximationTakeLowestEdge() {
 	}
 
 	std::cout << "Hamiltonian path cost: " << currentGraph.getHamPathCost() << "\n";
-	for (int i = 0; i < hamPathVertices.size() - 1; i++) {
+	std::cout << "Edges:\n";
+	for (unsigned int i = 0; i < hamPathVertices.size() - 1; i++) {
 		std::cout << hamPathVertices[i] << " " << hamPathVertices[i + 1] << "\n";
 	}
 	std::cout << hamPathVertices.back() << " " << hamPathVertices.front() << "\n";
@@ -55,7 +61,7 @@ int main() {
 			TSPApproximationSortedEdges();
 		}
 		else if (command == 2) {
-			TSPApproximationTakeLowestEdge();
+			TSPApproximationNearestNeighbour();
 		}
 
 		std::cout << "\n";
