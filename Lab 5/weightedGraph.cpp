@@ -46,47 +46,54 @@ void WeightedGraph::loadGraphFromFile(std::string filePath) {
 	in.close();
 }
 
-std::vector<Edge> WeightedGraph::approximateTSPSortingEdges(){
-	std::vector<Edge> allEdges;
-	std::vector<Edge> hamPathEdges;
-	std::vector<int> remainingVertices;
-	int* vertexDegree = new int[this->numberOfVertices];
-	DisjointSetForest currentDSF(this->numberOfVertices);
-	int root1, root2;
+bool WeightedGraph::selectEdgesRec(int positionInEdgeList, int cycleLength) {
+	Edge currentEdge = this->allEdges[positionInEdgeList];
+	int sourceVertex = currentEdge.srcVertex;
+	int destVertex = currentEdge.destVertex;
+	bool result = false;
 
-	for (int i = 0; i < this->numberOfVertices; i++) {
-		vertexDegree[i] = 0;
+	this->hamPathEdges.push_back(currentEdge);
+	this->hamPathCost += this->costEdges[currentEdge];
+	this->visitCount[sourceVertex]++;
+	this->visitCount[destVertex]++;
+
+	if (cycleLength == this->numberOfVertices - 1) {
+		return true;
 	}
+
+	for (int i = positionInEdgeList + 1; i < this->allEdges.size(); i++) {
+		if (this->visitCount[this->allEdges[i].srcVertex] < 2 and this->visitCount[this->allEdges[i].destVertex] < 2) {
+			result = selectEdgesRec(i, cycleLength + 1);
+			if (result == true) {
+				return true;
+			}
+		}
+	}
+
+	this->hamPathEdges.pop_back();
+	this->hamPathCost -= this->costEdges[currentEdge];
+	this->visitCount[sourceVertex]--;
+	this->visitCount[destVertex]--;
+
+	return result;
+}
+
+void WeightedGraph::approximateTSPSortingEdges(){
+	this->allEdges.clear();
 	for (auto currentEdge : costEdges) {
-		allEdges.push_back(currentEdge.first);
+		this->allEdges.push_back(currentEdge.first);
 	}
-	std::sort(allEdges.begin(), allEdges.end(), [this](const Edge& a, const Edge& b) {return costEdges[a] < costEdges[b]; });
-	
-	this->hamPathCost = 0;
-	for (auto currentEdge : allEdges) {
-		root1 = currentDSF.findRoot(currentEdge.srcVertex);
-		root2 = currentDSF.findRoot(currentEdge.destVertex);
+	std::sort(this->allEdges.begin(), this->allEdges.end(), [this](const Edge& a, const Edge& b) {return costEdges[a] < costEdges[b]; });
 
-		// the vertices are not from the same connected component
-		if (root1 != root2) {
-			currentDSF.uniteSets(root1, root2);
-			hamPathEdges.push_back(currentEdge);
-			vertexDegree[currentEdge.srcVertex]++;
-			vertexDegree[currentEdge.destVertex]++;
-			this->hamPathCost += costEdges[currentEdge];
-		}
-	}
-
+	this->visitCount.clear();
 	for (int i = 0; i < this->numberOfVertices; i++) {
-		if (vertexDegree[i] == 1) {
-			remainingVertices.push_back(i);
-		}
+		this->visitCount.push_back(0);
 	}
 
-	hamPathEdges.push_back(Edge(remainingVertices[0], remainingVertices[1]));
+	this->hamPathEdges.clear();
+	this->hamPathCost = 0;
 
-	delete[] vertexDegree;
-	return hamPathEdges;
+	this->selectEdgesRec(0, 0);
 }
 
 int WeightedGraph::getEdgeCost(int a, int b){
@@ -96,20 +103,20 @@ int WeightedGraph::getEdgeCost(int a, int b){
 	return this->costEdges[Edge(b, a)];
 }
 
-bool WeightedGraph::recursiveTraversal(int sourceVertex, int cycleDepth){
+bool WeightedGraph::DFSNearestNeighbour(int sourceVertex, int cycleLength){
 	this->visited[sourceVertex] = true;
 	std::vector<int> outboundNeighbours = outEdges[sourceVertex];
 	std::sort(outboundNeighbours.begin(), outboundNeighbours.end(), [this, sourceVertex](int a, int b) {return getEdgeCost(sourceVertex, a) < getEdgeCost(sourceVertex, b); });
 	bool hasFoundOriginalVertex = false;
 
 	for (auto neighbour : outboundNeighbours) {
-		if (neighbour == this->originalVertex and cycleDepth == this->numberOfVertices - 1) {
+		if (neighbour == this->originalVertex and cycleLength == this->numberOfVertices - 1) {
 			this->hamPathVertices.push_back(sourceVertex);
 			this->hamPathCost += this->getEdgeCost(sourceVertex, neighbour);
 			return true; // propel the result up the DFS tree
 		}
 		else if (visited[neighbour] == false) {
-			hasFoundOriginalVertex = recursiveTraversal(neighbour, cycleDepth + 1);
+			hasFoundOriginalVertex = DFSNearestNeighbour(neighbour, cycleLength + 1);
 			if (hasFoundOriginalVertex) {
 				this->hamPathVertices.push_back(sourceVertex);
 				this->hamPathCost += this->getEdgeCost(sourceVertex, neighbour);
@@ -132,11 +139,15 @@ void WeightedGraph::approximateTSPNearestNeighbour(){
 	}
 
 	this->hamPathVertices.clear();
-	this->recursiveTraversal(this->originalVertex, 0);
+	this->DFSNearestNeighbour(this->originalVertex, 0);
 }
 
 const std::vector<int>& WeightedGraph::getHamPathVertices() {
 	return this->hamPathVertices;
+}
+
+const std::vector<Edge>& WeightedGraph::getHamPathEdges(){
+	return this->hamPathEdges;
 }
 
 int WeightedGraph::getHamPathCost(){

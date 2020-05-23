@@ -16,8 +16,12 @@ class WeightedGraph{
 		std::vector < std::vector <int> > inEdges;
 		std::vector < std::vector <int> > outEdges;
 
+		std::vector<Edge> allEdges;
+		std::vector<Edge> hamPathEdges; // used in the sorted edges method
+		std::vector<int> visitCount; // used in the sorted edges method
+
 		std::vector<int> hamPathVertices; // used in the nearest neighbour method
-		std::vector<bool> visited;
+		std::vector<bool> visited; // used in the nearest neighbour method
 		int originalVertex;
 
 		void addVertex();
@@ -39,7 +43,8 @@ class WeightedGraph{
 		*/
 
 		int getEdgeCost(int a, int b);
-		bool recursiveTraversal(int sourceVertex, int cycleDepth);
+		bool DFSNearestNeighbour(int sourceVertex, int cycleLength);
+		bool selectEdgesRec(int positionInEdgeList, int cycleLength);
 		
 	public:
 		WeightedGraph();
@@ -69,11 +74,12 @@ class WeightedGraph{
 				- The graph contains the edges and vertices from the file
 		*/
 
-		std::vector<Edge> approximateTSPSortingEdges();
+		void approximateTSPSortingEdges();
 		void approximateTSPNearestNeighbour();
 
 		int getHamPathCost();
 		const std::vector<int>& getHamPathVertices();
+		const std::vector<Edge>& getHamPathEdges();
 
 		~WeightedGraph();
 		/*
